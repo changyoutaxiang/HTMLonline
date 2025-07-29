@@ -1,0 +1,12 @@
+{
+  "name": "html-hosting",
+  "build": {
+    "command": "npm install"
+  },
+  "start": {
+    "command": "npm start"
+  },
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
