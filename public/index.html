@@ -219,6 +219,24 @@
             background: #2196f3;
         }
 
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+        }
+
         .btn-danger {
             background: #ff4757;
             color: white;
@@ -500,6 +518,8 @@
                     </div>
                     <div class="file-actions">
                         <a href="${file.url}" target="_blank" class="btn btn-primary">查看</a>
+                        <button class="btn btn-secondary" onclick="shareFile('${file.url}', '${file.originalName}')">分享</button>
+                        <button class="btn btn-info" onclick="copyLink('${file.url}')">复制链接</button>
                         <button class="btn btn-danger" onclick="deleteFile('${file.id}')">删除</button>
                     </div>
                 </div>
@@ -561,6 +581,55 @@
                     document.body.removeChild(toast);
                 }, 300);
             }, 3000);
+        }
+
+        function getFullUrl(relativeUrl) {
+            // 获取当前页面的完整URL
+            const baseUrl = window.location.origin;
+            return baseUrl + relativeUrl;
+        }
+
+        function shareFile(url, fileName) {
+            const fullUrl = getFullUrl(url);
+            
+            // 检查是否支持Web Share API
+            if (navigator.share) {
+                navigator.share({
+                    title: fileName,
+                    text: `查看我分享的HTML文件: ${fileName}`,
+                    url: fullUrl
+                }).then(() => {
+                    showToast('分享成功！', 'success');
+                }).catch((error) => {
+                    console.log('分享失败:', error);
+                    copyLink(url);
+                });
+            } else {
+                // 如果不支持Web Share API，则复制链接
+                copyLink(url);
+            }
+        }
+
+        function copyLink(url) {
+            const fullUrl = getFullUrl(url);
+            
+            // 创建一个临时的textarea元素来复制链接
+            const textarea = document.createElement('textarea');
+            textarea.value = fullUrl;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            
+            try {
+                textarea.select();
+                document.execCommand('copy');
+                showToast('链接已复制到剪贴板！', 'success');
+            } catch (error) {
+                console.error('复制失败:', error);
+                showToast('复制失败，请手动复制链接', 'error');
+            } finally {
+                document.body.removeChild(textarea);
+            }
         }
     </script>
 </body>

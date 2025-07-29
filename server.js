@@ -125,6 +125,9 @@ app.get('/view/:filename', async (req, res) => {
     });
     
     if (fs.existsSync(filePath)) {
+      // 设置正确的Content-Type来渲染HTML
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
       res.sendFile(filePath);
     } else {
       res.status(404).send('File not found');
