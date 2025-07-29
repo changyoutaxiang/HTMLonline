@@ -20,6 +20,7 @@ coverage/
 
 # Uploads directory (might contain large files)
 uploads/
+database.sqlite
 
 # OS generated files
 .DS_Store

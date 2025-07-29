@@ -5,6 +5,8 @@ const path = require('path');
 const fs = require('fs-extra');
 const crypto = require('crypto');
 
+const { sequelize, File, initializeDatabase } = require('./models/database');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -13,8 +15,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// 确保上传目录存在
-const uploadsDir = path.join(__dirname, 'uploads');
+// 确保上传目录存在 - 支持挂载硬盘
+const uploadsDir = process.env.ZEABUR_MOUNT_PATH ? 
+    path.join(process.env.ZEABUR_MOUNT_PATH, 'uploads') :
+    path.join(__dirname, 'uploads');
 fs.ensureDirSync(uploadsDir);
 
 // 配置multer用于文件上传
@@ -45,68 +49,139 @@ const upload = multer({
   }
 });
 
-// 文件信息存储
-let files = [];
-
 // 获取所有文件列表
-app.get('/api/files', (req, res) => {
-  res.json(files);
+app.get('/api/files', async (req, res) => {
+  try {
+    const files = await File.findAll({
+      order: [['uploadDate', 'DESC']]
+    });
+    
+    const fileList = files.map(file => ({
+      id: file.id,
+      originalName: file.originalName,
+      filename: file.filename,
+      size: file.size,
+      uploadDate: file.uploadDate.toISOString(),
+      url: `/view/${file.filename}`,
+      accessCount: file.accessCount,
+      lastAccessed: file.lastAccessed.toISOString()
+    }));
+    
+    res.json(fileList);
+  } catch (error) {
+    console.error('获取文件列表失败:', error);
+    res.status(500).json({ error: '获取文件列表失败' });
+  }
 });
 
 // 上传HTML文件
-app.post('/api/upload', upload.single('htmlFile'), (req, res) => {
+app.post('/api/upload', upload.single('htmlFile'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
 
-  const fileInfo = {
-    id: crypto.randomBytes(8).toString('hex'),
-    originalName: req.file.originalname,
-    filename: req.file.filename,
-    size: req.file.size,
-    uploadDate: new Date().toISOString(),
-    url: `/view/${req.file.filename}`
-  };
-
-  files.push(fileInfo);
-  
-  res.json({
-    success: true,
-    file: fileInfo
-  });
+  try {
+    const fileId = crypto.randomBytes(8).toString('hex');
+    
+    const fileRecord = await File.create({
+      id: fileId,
+      originalName: req.file.originalname,
+      filename: req.file.filename,
+      size: req.file.size,
+      mimeType: req.file.mimetype
+    });
+    
+    res.json({
+      success: true,
+      file: {
+        id: fileRecord.id,
+        originalName: fileRecord.originalName,
+        filename: fileRecord.filename,
+        size: fileRecord.size,
+        uploadDate: fileRecord.uploadDate.toISOString(),
+        url: `/view/${fileRecord.filename}`,
+        accessCount: fileRecord.accessCount,
+        lastAccessed: fileRecord.lastAccessed.toISOString()
+      }
+    });
+  } catch (error) {
+    console.error('文件上传失败:', error);
+    res.status(500).json({ error: '文件上传失败' });
+  }
 });
 
 // 查看HTML文件
-app.get('/view/:filename', (req, res) => {
+app.get('/view/:filename', async (req, res) => {
   const filename = req.params.filename;
   const filePath = path.join(uploadsDir, filename);
   
-  if (fs.existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
+  try {
+    // 更新访问计数
+    await File.update({
+      accessCount: sequelize.literal('accessCount + 1'),
+      lastAccessed: new Date()
+    }, {
+      where: { filename: filename }
+    });
+    
+    if (fs.existsSync(filePath)) {
+      res.sendFile(filePath);
+    } else {
+      res.status(404).send('File not found');
+    }
+  } catch (error) {
+    console.error('访问文件失败:', error);
     res.status(404).send('File not found');
   }
 });
 
 // 删除文件
-app.delete('/api/files/:id', (req, res) => {
+app.delete('/api/files/:id', async (req, res) => {
   const fileId = req.params.id;
-  const fileIndex = files.findIndex(f => f.id === fileId);
   
-  if (fileIndex === -1) {
-    return res.status(404).json({ error: 'File not found' });
-  }
+  try {
+    const file = await File.findByPk(fileId);
+    
+    if (!file) {
+      return res.status(404).json({ error: 'File not found' });
+    }
 
-  const file = files[fileIndex];
-  const filePath = path.join(uploadsDir, file.filename);
-  
-  // 删除物理文件
-  fs.unlinkSync(filePath);
-  
-  // 从数组中移除
-  files.splice(fileIndex, 1);
-  
-  res.json({ success: true });
+    const filePath = path.join(uploadsDir, file.filename);
+    
+    // 删除物理文件
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+    
+    // 从数据库中删除
+    await file.destroy();
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('删除文件失败:', error);
+    res.status(500).json({ error: '删除文件失败' });
+  }
+});
+
+// 获取文件统计信息
+app.get('/api/stats', async (req, res) => {
+  try {
+    const totalFiles = await File.count();
+    const totalSize = await File.sum('size') || 0;
+    const totalViews = await File.sum('accessCount') || 0;
+    
+    res.json({
+      totalFiles,
+      totalSize,
+      totalViews,
+      lastUpload: await File.findOne({
+        order: [['uploadDate', 'DESC']]
+      })
+    });
+  } catch (error) {
+    console.error('获取统计信息失败:', error);
+    res.status(500).json({ error: '获取统计信息失败' });
+  }
 });
 
 // 主页
@@ -114,6 +189,22 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// 启动服务器
+async function startServer() {
+  try {
+    // 初始化数据库
+    await initializeDatabase();
+    
+    // 启动服务器
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log(`Uploads directory: ${uploadsDir}`);
+      console.log(`Database: ${sequelize.config.storage}`);
+    });
+  } catch (error) {
+    console.error('服务器启动失败:', error);
+    process.exit(1);
+  }
+}
+
+startServer();

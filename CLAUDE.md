@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a simple HTML file hosting and sharing application built with Node.js and Express. The application allows users to upload HTML files via drag-and-drop or file selection, view them online, and share them with others.
+This is a simple HTML file hosting and sharing application built with Node.js and Express. The application allows users to upload HTML files via drag-and-drop or file selection, view them online, and share them with others. It now features persistent storage using SQLite database and Zeabur's mounted disk for file persistence.
 
 ## Development Commands
 
@@ -17,6 +17,7 @@ This is a simple HTML file hosting and sharing application built with Node.js an
 The application follows a simple monolithic structure:
 
 - `server.js` - Main Express server containing all routes and middleware
+- `models/database.js` - Database models and initialization
 - `public/index.html` - Frontend HTML with embedded CSS and JavaScript
 - `uploads/` - Directory where uploaded HTML files are stored (created automatically)
 - `zeabur.json` - Zeabur deployment configuration
@@ -31,9 +32,11 @@ The application follows a simple monolithic structure:
 - Only accepts HTML files
 
 ### File Management
-- In-memory array stores file metadata (not persistent across restarts)
+- SQLite database stores file metadata with persistent storage
 - REST API for CRUD operations on files
 - Direct file serving via `/view/:filename` endpoint
+- File access tracking and statistics
+- Automatic cleanup when files are deleted
 
 ### Frontend Features
 - Responsive design that works on mobile and desktop
@@ -43,7 +46,18 @@ The application follows a simple monolithic structure:
 
 ## File Storage
 
-Files are stored locally in the `uploads/` directory. In production environments, consider using cloud storage solutions like AWS S3 or similar services for persistence and scalability.
+Files are stored in the `uploads/` directory, which automatically uses Zeabur's mounted disk when deployed (`ZEABUR_MOUNT_PATH` environment variable). This ensures file persistence across server restarts and deployments.
+
+### Database Storage
+- SQLite database stored in `database.sqlite` (or mounted disk if available)
+- File metadata including upload date, access count, and file information
+- Automatic database initialization and table creation
+
+### Production Deployment
+When deployed to Zeabur:
+- Files are stored on persistent mounted disk
+- Database is also stored on mounted disk for persistence
+- Environment variable `ZEABUR_MOUNT_PATH` is automatically set
 
 ## Deployment
 
@@ -51,10 +65,10 @@ The application is configured for Zeabur deployment with automatic build and sta
 
 ## Limitations
 
-- File metadata is stored in memory and lost on server restart
 - No authentication or user management
-- No database integration
-- File storage is local to the server instance
+- File storage is local to the server instance (but persistent with Zeabur mounted disk)
+- No built-in backup system
+- No file expiration or cleanup system
 
 ## Common Development Tasks
 
