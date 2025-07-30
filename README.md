@@ -58,10 +58,18 @@ npm start
 
 1. 将代码推送到GitHub仓库
 2. 在Zeabur中导入该仓库
-3. 在Zeabur环境变量中设置：
+3. **配置持久化存储**（重要）：
+   - 在服务设置中添加 Volume
+   - Volume ID: `html-storage`
+   - Path: `/data`
+4. 在Zeabur环境变量中设置：
    - `LOGIN_PASSWORD`: 设置登录密码
    - `SESSION_SECRET`: 设置session密钥
-4. 部署会自动进行
+   - `ZEABUR_MOUNT_PATH`: 设置为 `/data`（与Volume Path一致）
+5. 部署会自动进行
+
+### 重要提醒
+⚠️ **必须配置持久化存储**：不配置 `ZEABUR_MOUNT_PATH` 会导致容器重启时数据丢失！
 
 ## 环境变量配置
 
@@ -70,7 +78,7 @@ npm start
 | `LOGIN_PASSWORD` | 登录密码 | `admin123` | 推荐设置 |
 | `SESSION_SECRET` | Session加密密钥 | 随机生成 | 推荐设置 |
 | `PORT` | 服务器端口 | `3000` | 否 |
-| `ZEABUR_MOUNT_PATH` | Zeabur挂载路径 | - | 否 |
+| `ZEABUR_MOUNT_PATH` | Zeabur持久化存储挂载路径 | - | **强烈推荐** |
 
 ## 使用说明
 
@@ -157,7 +165,16 @@ cp env.example .env
 
 ## 更新日志
 
-### v2.2.0 (最新)
+### v2.2.1 (最新)
+- 🐛 **修复严重的文件记忆丢失Bug** - 解决数据库和文件存储路径不一致问题
+- 🔧 **修复数据库路径配置错误** - 统一数据库存储位置到项目根目录
+- 📁 **修复文件存储路径不一致** - 统一上传文件存储路径配置
+- 🛡️ **修复.gitignore配置缺陷** - 防止重要数据被意外忽略
+- 📊 **修复系统状态API显示错误** - 正确显示数据库路径信息
+- 📋 **添加详细的Bug修复报告** - 参见 `BUG_FIX_REPORT.md`
+- ⚙️ **增强ZEABUR_MOUNT_PATH支持** - 完善持久化存储配置
+
+### v2.2.0
 - 🎯 **彻底解决分享链接失效问题** - 使用MD5哈希文件名策略
 - 🔄 **自动文件迁移功能** - 启动时自动转换旧的随机文件名
 - 🗜️ **智能文件去重** - 相同内容文件自动合并，节省存储空间
