@@ -162,7 +162,7 @@ app.post('/api/upload', requireAuth, upload.single('htmlFile'), async (req, res)
 });
 
 // 查看HTML文件
-app.get('/view/:filename', requireAuth, async (req, res) => {
+app.get('/view/:filename', async (req, res) => {
   const filename = req.params.filename;
   const filePath = path.join(uploadsDir, filename);
   
