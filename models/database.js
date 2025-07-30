@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 // 数据库路径 - 使用挂载硬盘或本地存储
 const dbPath = process.env.ZEABUR_MOUNT_PATH ? 
     path.join(process.env.ZEABUR_MOUNT_PATH, 'database.sqlite') :
-    path.join(__dirname, 'database.sqlite');
+    path.join(__dirname, '..', 'database.sqlite');
 
 // 添加备用数据库路径，确保向后兼容
 const backupDbPath = path.join(__dirname, 'database.sqlite');
@@ -148,12 +148,17 @@ async function migrateRandomFilesToHashFiles() {
         
         console.log(`找到 ${randomFiles.length} 个需要迁移的随机文件名文件`);
         
-        // 确定存储路径
+        // 确定存储路径 - 与server.js保持一致
         const uploadsDir = process.env.ZEABUR_MOUNT_PATH ? 
             path.join(process.env.ZEABUR_MOUNT_PATH, 'uploads') :
             path.join(__dirname, '..', 'uploads');
         
         const backupUploadsDir = path.join(__dirname, '..', 'uploads');
+        
+        // 确保目录存在
+        const fs = require('fs-extra');
+        fs.ensureDirSync(uploadsDir);
+        fs.ensureDirSync(backupUploadsDir);
         
         for (const fileRecord of randomFiles) {
             try {

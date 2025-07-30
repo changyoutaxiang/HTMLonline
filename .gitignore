@@ -18,9 +18,16 @@ pids
 # Coverage directory used by tools like istanbul
 coverage/
 
-# Uploads directory (might contain large files)
-uploads/
-database.sqlite
+# 注意：不再忽略uploads目录和database.sqlite以防止数据丢失
+# 如果需要忽略大文件，请使用Git LFS
+# uploads/
+# database.sqlite
+
+# 临时文件和缓存
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
 
 # OS generated files
 .DS_Store

@@ -413,8 +413,10 @@ app.post('/api/recover', requireAuth, async (req, res) => {
 // 获取系统状态信息
 app.get('/api/system/status', requireAuth, async (req, res) => {
   try {
-    const mainDbExists = fs.existsSync(sequelize.config.storage);
-    const backupDbExists = fs.existsSync(path.join(__dirname, 'database.sqlite'));
+    const mainDbPath = sequelize.options.storage;
+    const backupDbPath = path.join(__dirname, 'models', 'database.sqlite');
+    const mainDbExists = fs.existsSync(mainDbPath);
+    const backupDbExists = fs.existsSync(backupDbPath);
     const mainUploadsExists = fs.existsSync(uploadsDir);
     const backupUploadsExists = fs.existsSync(backupUploadsDir);
     
@@ -429,8 +431,8 @@ app.get('/api/system/status', requireAuth, async (req, res) => {
       storage: {
         mainUploadsDir: uploadsDir,
         backupUploadsDir: backupUploadsDir,
-        mainDbPath: sequelize.config.storage,
-        backupDbPath: path.join(__dirname, 'database.sqlite')
+        mainDbPath: mainDbPath,
+        backupDbPath: backupDbPath
       },
       status: {
         mainDbExists,
@@ -468,7 +470,7 @@ async function startServer() {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
       console.log(`Uploads directory: ${uploadsDir}`);
-      console.log(`Database: ${sequelize.config.storage}`);
+      console.log(`Database: ${sequelize.options.storage}`);
     });
   } catch (error) {
     console.error('服务器启动失败:', error);

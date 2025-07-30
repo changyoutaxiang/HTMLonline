@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻速览 (202507) - 增强阅读版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .card {
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e5e7eb;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Thematic Gradients for Cards */
+        .card-theme-sky { background: linear-gradient(135deg, #f0f9ff, #ffffff); }
+        .card-theme-emerald { background: linear-gradient(135deg, #ecfdf5, #ffffff); }
+        .card-theme-blue { background: linear-gradient(135deg, #eff6ff, #ffffff); }
+        .card-theme-rose { background: linear-gradient(135deg, #fff1f2, #ffffff); }
+        .card-theme-indigo { background: linear-gradient(135deg, #eef2ff, #ffffff); }
+
+        .prose-custom h2 {
+            color: #111827;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .prose-custom p {
+            line-height: 1.8;
+            margin-bottom: 1.25rem; /* Increased paragraph spacing */
+            color: #374151;
+        }
+        .prose-custom .summary-content p:first-of-type::first-letter {
+            font-size: 3.5em; /* Larger font size for drop cap */
+            font-weight: 700;
+            float: left;
+            line-height: 0.8;
+            margin-right: 0.1em;
+            padding-top: 0.1em;
+        }
+        /* Thematic Drop Caps */
+        .card-theme-sky .prose-custom .summary-content p:first-of-type::first-letter { color: #0ea5e9; }
+        .card-theme-emerald .prose-custom .summary-content p:first-of-type::first-letter { color: #10b981; }
+        .card-theme-blue .prose-custom .summary-content p:first-of-type::first-letter { color: #3b82f6; }
+        .card-theme-rose .prose-custom .summary-content p:first-of-type::first-letter { color: #ec4899; }
+        .card-theme-indigo .prose-custom .summary-content p:first-of-type::first-letter { color: #6366f1; }
+
+        .prose-custom blockquote {
+            padding: 1rem 1.5rem;
+            margin-left: 0;
+            font-size: 1.05rem;
+            font-weight: 500;
+            border-radius: 8px;
+        }
+
+        .summary-subheading {
+            font-weight: 600;
+            color: #111827;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 2px solid rgba(0,0,0,0.05);
+        }
+
+        /* Thematic Blockquotes */
+        .blockquote-theme-sky { border-left: 4px solid #38bdf8; background-color: #e0f2fe; color: #0c4a6e; }
+        .blockquote-theme-emerald { border-left: 4px solid #34d399; background-color: #d1fae5; color: #065f46; }
+        .blockquote-theme-blue { border-left: 4px solid #60a5fa; background-color: #dbeafe; color: #1e40af; }
+        .blockquote-theme-rose { border-left: 4px solid #f472b6; background-color: #fce7f3; color: #9d174d; }
+        .blockquote-theme-indigo { border-left: 4px solid #818cf8; background-color: #e0e7ff; color: #3730a3; }
+
+        .key-data-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+        .key-data-item {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .key-data-item .icon { flex-shrink: 0; width: 2rem; height: 2rem; display: grid; place-items: center; border-radius: 8px; }
+        .key-data-item-title { font-weight: 600; color: #374151; margin-bottom: 0.1rem; }
+        .key-data-item-content { font-size: 0.9rem; color: #6b7280; }
+        
+        /* Thematic Icons in Key Data */
+        .key-data-icon-sky { background-color: #bae6fd; color: #0369a1; }
+        .key-data-icon-emerald { background-color: #a7f3d0; color: #047857; }
+        .key-data-icon-blue { background-color: #bfdbfe; color: #1d4ed8; }
+        .key-data-icon-rose { background-color: #fbcfe8; color: #9d174d; }
+        .key-data-icon-indigo { background-color: #c7d2fe; color: #4338ca; }
+
+        .toggle-section header { cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; transition: background-color 0.2s ease; border-radius: 8px; }
+        .toggle-section header:hover { background-color: rgba(255, 255, 255, 0.8); }
+        .toggle-section .content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; padding: 0 0.5rem; }
+        .toggle-section.open .content { max-height: 1000px; padding: 0.5rem; }
+        .toggle-icon { transition: transform 0.3s ease; }
+        .toggle-section.open .toggle-icon { transform: rotate(90deg); }
+        .tag-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; font-weight: 600; }
+        
+        .tag-essence .tag-title { color: #4f46e5; }
+        .tag-plain .tag-title { color: #16a34a; }
+
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-8">
+
+    <header class="text-center mb-12 md:mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-purple-500 to-pink-500">新闻速览</h1>
+        <p class="text-lg text-gray-500 mt-3">2025年7月</p>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+        <!-- 新闻卡片 1: 微软Edge浏览器 -->
+        <article class="card card-theme-sky col-span-1 lg:col-span-2">
+            <div class="p-8">
+                <div class="prose-custom max-w-none">
+                    <h2>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9V3m0 18a9 9 0 01-9-9m-9 9a9 9 0 019-9" /></svg>
+                        微软Edge浏览器推出Copilot智能助手模式
+                    </h2>
+                    <blockquote class="blockquote-theme-sky">
+                        <p>微软在Edge浏览器中推出Copilot模式，通过AI智能体功能实现自动化搜索、整合和导航，提升用户浏览效率，同时确保隐私安全。</p>
+                    </blockquote>
+                    <div class="key-data-grid my-6">
+                        <div class="key-data-item"><div class="icon key-data-icon-sky"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" /></svg></div><div><div class="key-data-item-title">租房搜索上限</div><div class="key-data-item-content">月租不超过5000美元</div></div></div>
+                        <div class="key-data-item"><div class="icon key-data-icon-sky"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h.01M7 11h.01M16 3h.01M16 7h.01M16 11h.01M12 3h.01M12 7h.01M12 11h.01M3 21h18M3 17h18M3 13h18" /></svg></div><div><div class="key-data-item-title">传统浏览痛点</div><div class="key-data-item-content">常打开30-40个标签页</div></div></div>
+                        <div class="key-data-item"><div class="icon key-data-icon-sky"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4H5z" /></svg></div><div><div class="key-data-item-title">价格</div><div class="key-data-item-content">免费开放</div></div></div>
+                    </div>
+                    <div class="summary-content">
+                        <h4 class="summary-subheading">核心功能与目标</h4>
+                        <p>微软近日在Edge浏览器中推出了全新的Copilot模式，旨在通过AI技术重塑用户的浏览体验。Copilot模式是一个多层级的混合智能体功能，用户只需输入需求，如“在洛杉矶市区找一个三室两卫、月租不超过5000美元的房子”，Copilot即可自动执行搜索、整合并给出对比结果。这一功能还支持标签筛选和意图理解，帮助用户从繁琐的标签页管理中解放出来。</p>
+                        <h4 class="summary-subheading">交互体验升级</h4>
+                        <p>传统浏览器使用中,用户常需打开30、40个标签页逐一筛选,而Copilot模式通过自动化操作和AI的整合能力显著提升效率。启用Copilot模式后,Edge的新标签页将变为一个简洁的输入框,整合了聊天、搜索和导航功能。Copilot能理解用户意图,并查看所有打开的标签页以全面了解用户需求。例如,在研究度假酒店时,用户可通过与Copilot对话快速筛选出最符合条件的选项。此外,Copilot支持自然语音导航,用户只需说出需求,即可减少点击和输入操作。</p>
+                        <h4 class="summary-subheading">未来展望与隐私</h4>
+                        <p>未来,Copilot还将支持访问更多浏览器上下文信息(如历史记录),实现更高级的个性化服务,例如自动完成桨板租赁的搜索、预订及天气查询。Copilot模式还允许用户在任意网页调用其功能,动态面板的设计确保原始页面可见,减少干扰。它还能引导用户完成任务,并将浏览历史组织成主题旅程,提供下一步建议。微软强调隐私安全,用户数据受严格保护,且可随时开关Copilot模式。目前,该功能已免费开放,并将持续迭代优化。</p>
+                    </div>
+                    <div class="mt-6 space-y-4">
+                        <div class="toggle-section tag-essence open"><header><div class="tag-title"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-7h3m-3 4h3m-3-8h3m-3 4h3M9 7h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2z" /></svg>本质</div><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></header><div class="content"><p class="text-sm text-gray-600">微软Edge的Copilot模式本质是用AI重构人机交互逻辑，将传统“用户主动搜索+手动筛选”的线性流程，升级为“需求描述-AI代理执行”的闭环服务。其核心突破在于两点：一是通过意图理解将碎片化操作（如开30个标签比价）整合为单一任务，二是通过多模态交互（语音、文字）降低操作门槛，本质上是把浏览器从“信息陈列馆”变成了“智能任务管家”。</p></div></div>
+                        <div class="toggle-section tag-plain open"><header><div class="tag-title"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>白话</div><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></header><div class="content"><p class="text-sm text-gray-600">这就像你的浏览器从一个需要你手动翻阅的“图书馆”，升级成了一个能听懂你话的“私人图书管理员”。你不用再自己跑遍几十个书架（标签页）找资料，只要告诉管理员“我要找什么”，他就能迅速把最相关的几本书直接递到你面前。</p></div></div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- 新闻卡片 2: 智谱发布GLM-4.5 -->
+        <article class="card card-theme-emerald">
+            <div class="p-8 prose-custom max-w-none">
+                <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>智谱发布GLM-4.5，国产开源模型登顶全球第三</h2>
+                 <blockquote class="blockquote-theme-emerald"><p>智谱深夜无预警发布GLM-4.5和GLM-4.5-Air两款开源模型，参数量分别为355B和106B，综合评测全球第三、国产第一，API价格低至0.8元/百万tokens，生成速度达100tokens/秒，并在编程任务中表现优异。</p></blockquote>
+                <div class="summary-content">
+                    <h4 class="summary-subheading">模型参数与性能</h4>
+                    <p>智谱在深夜无预告的情况下发布了GLM-4.5和GLM-4.5-Air两款开源模型,采用MIT协议全面开源。GLM-4.5总参数量为355B,激活参数32B,而GLM-4.5-Air参数量为106B,激活参数12B。尽管参数量仅为DeepSeek-R1的1/2和Kimi-K2的1/3,但GLM-4.5在综合评测中表现优异,位列全球模型第三、国产模型第一,成为开源模型的SOTA。</p>
+                    <h4 class="summary-subheading">核心技术与训练</h4>
+                    <p>该模型在15万亿token的通用数据上进行了预训练,并在代码、推理、智能体等领域的8万亿token数据上进行了针对性训练,最后通过强化学习进一步提升了推理、代码和智能体能力。在编程任务测试中,GLM-4.5与Claude-4-Sonnet、Kimi-K2和Qwen3-Coder进行了对比,结果显示其在52个编程开发任务中表现国内最佳,多数场景可替代Claude-4-Sonnet,并显著优于K2和Qwen3-Coder。</p>
+                    <h4 class="summary-subheading">商业化与生态</h4>
+                    <p>API定价极具竞争力,输入价格低至0.8元/百万tokens,输出价格为2元/百万tokens,生成速度最高可达100tokens/秒。智谱还公开了测试题目和Agent轨迹,确保透明度,供用户验证复现。普通用户可在z.ai上免费使用该模型,智谱此次发布不仅展示了技术实力,还以高性价比和开源策略推动生态发展,成为未来搭配Claude Code的理想选择。</p>
+                </div>
+                <div class="mt-6 space-y-4">
+                    <div class="toggle-section tag-essence open"><header><div class="tag-title"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-7h3m-3 4h3m-3-8h3m-3 4h3M9 7h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2z" /></svg>本质</div><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></header><div class="content"><p class="text-sm text-gray-600">国产AI模型的快速崛起实质是技术自主与商业策略的双重突围——通过开源降低生态门槛、高性价比抢占市场，同时以垂直领域优化（如编程）形成差异化竞争力。这背后是“以应用换生态，以生态促研发”的良性循环，旨在全球AI竞赛中弯道超车。</p></div></div>
+                    <div class="toggle-section tag-plain open"><header><div class="tag-title"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>白话</div><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></header><div class="content"><p class="text-sm text-gray-600">这相当于国产的一个“武林高手”横空出世，不仅内功深厚（性能强劲，全球第三），而且学费便宜得惊人（API价格低），还把武功秘籍（代码）免费公开了。尤其擅长写代码，以后程序员们多了一个物美价廉的好帮手。</p></div></div>
+                </div>
+            </div>
+        </article>
+
+        <!-- 新闻卡片 3: Meta专家毕树超谈AI进化 -->
+        <article class="card card-theme-blue">
+            <div class="p-8 prose-custom max-w-none">
+                <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.657 7.343A8 8 0 0117.657 18.657z" /><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 16.121A3 3 0 1014.12 11.88l-4.242 4.242z" /></svg>Meta专家毕树超谈AI进化: AGI曙光已现</h2>
+                <blockquote class="blockquote-theme-blue"><p>Meta超级智能团队成员毕树超回顾AI发展历程，从AlexNet到Transformer，强调算力和数据的重要性，并预测2025年AGI(通用人工智能)将实现，认为智能并非人类独有，AI影响被低估。</p></blockquote>
+                <div class="summary-content">
+                    <h4 class="summary-subheading">AI发展回顾</h4>
+                    <p>Meta超级智能团队成员毕树超近期在哥伦比亚大学和哈佛大学发表演讲,系统回顾了过去15年AI技术的发展历程,并展望了未来趋势。他认为,从2012年AlexNet的突破性表现开始,深度学习革命正式拉开帷幕,随后Word2Vec、GAN、ResNet等技术的出现进一步推动了AI的发展。2017年Transformer架构的提出成为重要转折点,解决了并行训练和梯度消失的问题,为后续GPT系列模型的成功奠定了基础。</p>
+                    <h4 class="summary-subheading">Scaling Law的重要性</h4>
+                    <p>毕树超特别强调了Scaling Law的重要性,该定律表明算力、参数量和数据量的增加会线性降低损失函数,精准预测了GPT-4的性能。他认为,AI的发展本质上是算力碾压人类精巧设计算法的过程,而智能的分布类似于幂律曲线,模型通过捕获数据中的高阶模式实现“能力涌现”。</p>
+                    <h4 class="summary-subheading">AGI的实现与挑战</h4>
+                    <p>在谈到AGI(通用人工智能)时,毕树超分享了自己的心路历程。他最初对AGI持怀疑态度,但随着对AI理解的加深,逐渐改变了看法。他认为人脑并非独一无二,只是生物进化的结果,而真正关键的因素在于系统的规模。他预测2025年AGI将实现,并指出高质量人类数据的稀缺是当前的主要挑战,但通过计算机与环境的交互自动生成数据可能是解决方案。毕树超还讨论了强化学习和自监督学习的进展,指出深度神经网络在高维空间中的优化问题已不再是障碍,过参数化反而成为优势。他认为,预测本身就是一种压缩和理解,大语言模型通过预测下一个词来压缩语言模式,这与人类理解世界的方式类似。最后,他总结道,过去十年AI领域打破了许多误解,未来将继续沿着算力和数据驱动的方向发展,AGI的曙光已经显现。</p>
+                </div>
+                <div class="mt-6 space-y-4">
+                    <div class="toggle-section tag-essence open"><header><div class="tag-title"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-7h3m-3 4h3m-3-8h3m-3 4h3M9 7h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2z" /></svg>本质</div><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></header><div class="content"><p class="text-sm text-gray-600">AI的进化本质是“暴力美学”的胜利,即依靠指数级增长的算力和数据规模,而非依赖人类设计的精巧算法,来驱动智能涌现。AGI的实现不再是哲学问题,而是一个可以通过“大力出奇迹”解决的工程问题,其核心瓶颈已从算法设计转向高质量数据的持续供给。</p></div></div>
+                    <div class="toggle-section tag-plain open"><header><div class="tag-title"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>白话</div><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></header><div class="content"><p class="text-sm text-gray-600">这就像专家在说，造出“终结者”那样的超级智能，关键不在于模仿人脑的“灵感”，而在于用足够多的电和数据去“硬堆”。只要算力够猛、数据管够，AI就能自己“悟道”，实现通用人工智能只是个时间问题，而且这个时间可能比我们想的要快得多。</p></div></div>
+                </div>
+            </div>
+        </article>
+
+        <!-- 新闻卡片 4: 字节开源扣子 -->
+        <article class="card card-theme-rose">
+             <div class="p-8 prose-custom max-w-none">
+                <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>字节开源AI开发平台扣子助力智能体开发</h2>
+                <blockquote class="blockquote-theme-rose"><p>字节跳动开源AI Agent开发平台扣子(Coze),提供可视化无代码开发环境,支持多种大模型和工具,开发者可快速构建智能客服等应用并一键分享至主流平台。</p></blockquote>
+                <div class="summary-content">
+                    <h4 class="summary-subheading">平台核心功能</h4>
+                    <p>字节跳动推出的AI Agent开发平台扣子(Coze)现已开源并支持商业化,为开发者提供一站式可视化开发环境。扣子集成多种大模型和工具,支持无代码或低代码开发,用户可通过现成模板快速构建智能体,涵盖营销、客服、教育等上百种应用场景。开发完成后,智能体可一键分享至微信、抖音等主流平台。</p>
+                    <h4 class="summary-subheading">技术架构与优势</h4>
+                    <p>以智能客服为例,开发者无需编写代码,仅需选择模板、配置变量、数据库和长期记忆功能即可完成定制。扣子还支持多语言语音播报和用户输入方式设置,进一步提升交互体验。平台后端采用Golang,前端基于React + TypeScript,架构灵活且高性能,适合复杂业务需求。扣子的功能模块丰富,包括模型服务、智能体构建、工作流开发等,支持插件、知识库等资源的集成,有效解决模型幻觉问题。</p>
+                    <h4 class="summary-subheading">开源与生态</h4>
+                    <p>开源版本为开发者提供了完整的框架和API,可快速启动AI Agent项目。无论是新手还是资深开发者,都能通过扣子高效实现AI应用的开发和部署。开源地址和体验地址已公布,开发者可自由探索这一强大的AI开发工具。</p>
+                </div>
+                 <div class="mt-6 space-y-4">
+                    <div class="toggle-section tag-essence open"><header><div class="tag-title"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-7h3m-3 4h3m-3-8h3m-3 4h3M9 7h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2z" /></svg>本质</div><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></header><div class="content"><p class="text-sm text-gray-600">字节开源AI开发平台“扣子”实质是降低AI应用开发门槛的“基础设施工具包”。其核心并非技术创新,而是通过开源生态+无代码设计,将大模型能力封装成乐高式模块,解决AI落地“最后一公里”的问题。</p></div></div>
+                    <div class="toggle-section tag-plain open"><header><div class="tag-title"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>白话</div><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></header><div class="content"><p class="text-sm text-gray-600">这好比手机厂商把摄像头模组、处理器、屏幕全拆成标准零件(开源),再附赠美图秀秀(无代码工具)。普通人不用懂光学原理,拖拽几下就能拼出拍照手机。字节扮演的不是发明相机的柯达,而是提供“零件超市+说明书”的华强北,赌的是未来人人都需要定制AI助理的时代红利。</p></div></div>
+                </div>
+            </div>
+        </article>
+
+        <!-- 新闻卡片 5: 腾讯发布Tairos -->
+        <article class="card card-theme-indigo">
+            <div class="p-8 prose-custom max-w-none">
+                <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.28 9.099c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>腾讯发布具身智能平台Tairos，助力机器人行业发展</h2>
+                <blockquote class="blockquote-theme-indigo"><p>腾讯Robotics X实验室在世界人工智能大会上发布具身智能开放平台Tairos,旨在通过模块化软件平台为机器人行业提供通用开发工具,推动行业技术发展,而非直接商业化盈利。</p></blockquote>
+                <div class="summary-content">
+                    <h4 class="summary-subheading">平台定位与目标</h4>
+                    <p>在世界人工智能大会(WAIC)上,腾讯Robotics X实验室正式发布了具身智能开放平台Tairos,代号“钛螺丝”。该平台是一个软件平台,旨在为机器人行业提供通用的开发工具,而非直接商业化盈利。腾讯首席科学家张正友表示,机器人行业目前尚未进入“iPhone时刻”,甚至还未达到“大哥大”阶段,因此腾讯选择通过开放平台的方式,为行业探索者提供技术支持。</p>
+                    <h4 class="summary-subheading">核心技术架构</h4>
+                    <p>Tairos平台由三大核心模型组成:右脑(多模态感知模型)、左脑(规划大模型)和小脑(感知行动联合大模型),分别负责环境感知、任务规划和行动执行。其中,规划大模型在复杂任务中的成功率达到了80%,超过了GPT-40等闭源系统。此外,平台还提供云端仿真工具链,帮助开发者高效验证算法。</p>
+                    <h4 class="summary-subheading">战略与未来规划</h4>
+                    <p>张正友强调,机器人行业目前仍处于探索阶段,过早锁定“人形”形态可能限制技术潜力。腾讯希望通过Tairos平台推动行业在效率、形态和技术上的多样化发展。尽管当前具身智能领域热度高涨,腾讯仍保持战略定力,计划在未来三年内进一步提升技术成熟度,以支持养老等复杂场景应用。腾讯的这一举措被视为对行业长期发展的战略投资,旨在通过开放技术积累,推动整个行业更快迈向“iPhone时刻”。</p>
+                </div>
+                <div class="mt-6 space-y-4">
+                    <div class="toggle-section tag-essence open"><header><div class="tag-title"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-7h3m-3 4h3m-3-8h3m-3 4h3M9 7h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2z" /></svg>本质</div><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></header><div class="content"><p class="text-sm text-gray-600">腾讯发布Tairos平台的实质是用“开源基建”思维抢占机器人行业的底层技术标准话语权。其核心逻辑在于:当行业尚处“石器时代”时,通过提供免费工具链培养开发者生态,未来在技术爆发期自然成为行业基础设施的制定者。这类似于安卓系统早期通过开放策略占领移动互联网入口。</p></div></div>
+                    <div class="toggle-section tag-plain open"><header><div class="tag-title"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>白话</div><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></header><div class="content"><p class="text-sm text-gray-600">就像早期铁路公司免费送铁轨给淘金者,表面是做慈善,实则是让所有矿车都必须用它的轨距。等遍地是黄金时,谁控制了铁轨,谁就控制了财富的流向。腾讯现在就是那个修铁路的。</p></div></div>
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <footer class="text-center mt-12 text-gray-500 text-sm">
+        <p>&copy; 2025 新闻速览。内容根据提供材料生成。</p>
+    </footer>
+
+    <script>
+        // Script for scroll animations
+        const cards = document.querySelectorAll('.card');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+
+        // Script for toggle sections
+        const toggleSections = document.querySelectorAll('.toggle-section');
+        toggleSections.forEach(section => {
+            const header = section.querySelector('header');
+            header.addEventListener('click', () => {
+                section.classList.toggle('open');
+            });
+        });
+    </script>
+
+</body>
+</html>
