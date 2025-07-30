@@ -119,8 +119,96 @@ async function checkAndMigrateData() {
             console.log(`成功迁移 ${backupFiles.length} 条文件记录`);
         }
         
+        // 修复现有文件：将随机文件名转换为哈希文件名
+        await migrateRandomFilesToHashFiles();
+        
     } catch (error) {
         console.log('数据迁移检查失败（可能是正常的）:', error.message);
+    }
+}
+
+// 将现有的随机文件名转换为哈希文件名
+async function migrateRandomFilesToHashFiles() {
+    const crypto = require('crypto');
+    const path = require('path');
+    
+    try {
+        // 获取所有文件记录，然后筛选出随机文件名（16个十六进制字符）
+        const allFiles = await File.findAll();
+        const randomFiles = allFiles.filter(file => {
+            const filename = file.filename;
+            // 检查是否是16个十六进制字符 + .html 的格式
+            return /^[a-f0-9]{16}\.html$/.test(filename);
+        });
+        
+        if (randomFiles.length === 0) {
+            console.log('没有需要迁移的随机文件名文件');
+            return;
+        }
+        
+        console.log(`找到 ${randomFiles.length} 个需要迁移的随机文件名文件`);
+        
+        // 确定存储路径
+        const uploadsDir = process.env.ZEABUR_MOUNT_PATH ? 
+            path.join(process.env.ZEABUR_MOUNT_PATH, 'uploads') :
+            path.join(__dirname, '..', 'uploads');
+        
+        const backupUploadsDir = path.join(__dirname, '..', 'uploads');
+        
+        for (const fileRecord of randomFiles) {
+            try {
+                // 查找文件的实际位置
+                const possiblePaths = [
+                    path.join(uploadsDir, fileRecord.filename),
+                    path.join(backupUploadsDir, fileRecord.filename)
+                ];
+                
+                let oldFilePath = null;
+                for (const testPath of possiblePaths) {
+                    if (fs.existsSync(testPath)) {
+                        oldFilePath = testPath;
+                        break;
+                    }
+                }
+                
+                if (!oldFilePath) {
+                    console.log(`文件不存在，跳过: ${fileRecord.filename}`);
+                    continue;
+                }
+                
+                // 读取文件内容并生成哈希
+                const fileContent = fs.readFileSync(oldFilePath);
+                const hash = crypto.createHash('md5').update(fileContent).digest('hex');
+                const ext = path.extname(fileRecord.filename);
+                const newFilename = `${hash}${ext}`;
+                const newFilePath = path.join(uploadsDir, newFilename);
+                
+                // 检查是否已存在相同哈希的文件
+                const existingHashFile = await File.findOne({ 
+                    where: { filename: newFilename } 
+                });
+                
+                if (existingHashFile) {
+                    // 如果已存在相同内容的文件，删除旧文件和记录
+                    console.log(`删除重复文件: ${fileRecord.filename} -> 已存在 ${newFilename}`);
+                    fs.unlinkSync(oldFilePath);
+                    await fileRecord.destroy();
+                } else {
+                    // 重命名文件和更新数据库记录
+                    fs.renameSync(oldFilePath, newFilePath);
+                    await fileRecord.update({ filename: newFilename });
+                    console.log(`迁移完成: ${fileRecord.filename} -> ${newFilename}`);
+                }
+                
+            } catch (error) {
+                console.error(`迁移文件失败 ${fileRecord.filename}:`, error.message);
+            }
+        }
+        
+        console.log('随机文件名迁移完成');
+        
+    } catch (error) {
+        console.error('随机文件名迁移失败:', error.message);
     }
 }
 
