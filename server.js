@@ -41,7 +41,13 @@ app.use(express.static('public'));
 const uploadsDir = process.env.ZEABUR_MOUNT_PATH ? 
     path.join(process.env.ZEABUR_MOUNT_PATH, 'uploads') :
     path.join(__dirname, 'uploads');
+
+// 添加备用存储路径，确保向后兼容
+const backupUploadsDir = path.join(__dirname, 'uploads');
+
+// 确保所有可能的目录都存在
 fs.ensureDirSync(uploadsDir);
+fs.ensureDirSync(backupUploadsDir);
 
 // 配置multer用于文件上传
 const storage = multer.diskStorage({
@@ -161,10 +167,25 @@ app.post('/api/upload', requireAuth, upload.single('htmlFile'), async (req, res)
   }
 });
 
-// 查看HTML文件
+// 查看HTML文件 - 增强版，支持多路径查找
 app.get('/view/:filename', async (req, res) => {
   const filename = req.params.filename;
-  const filePath = path.join(uploadsDir, filename);
+  
+  // 尝试多个可能的文件路径
+  const possiblePaths = [
+    path.join(uploadsDir, filename),
+    path.join(backupUploadsDir, filename)
+  ];
+  
+  let filePath = null;
+  
+  // 查找文件存在的路径
+  for (const testPath of possiblePaths) {
+    if (fs.existsSync(testPath)) {
+      filePath = testPath;
+      break;
+    }
+  }
   
   try {
     // 更新访问计数
@@ -175,13 +196,29 @@ app.get('/view/:filename', async (req, res) => {
       where: { filename: filename }
     });
     
-    if (fs.existsSync(filePath)) {
+    if (filePath) {
       // 设置正确的Content-Type来渲染HTML
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.setHeader('X-Content-Type-Options', 'nosniff');
       res.sendFile(filePath);
     } else {
-      res.status(404).send('File not found');
+      // 如果文件不存在，尝试从数据库获取信息
+      const fileRecord = await File.findOne({ where: { filename: filename } });
+      if (fileRecord) {
+        res.status(404).send(`
+          <html>
+            <head><title>文件未找到</title></head>
+            <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+              <h1>⚠️ 文件暂时不可用</h1>
+              <p>文件 "${fileRecord.originalName}" 存在记录但文件可能已被移动。</p>
+              <p>请联系管理员恢复文件。</p>
+              <p><small>文件ID: ${fileRecord.id}</small></p>
+            </body>
+          </html>
+        `);
+      } else {
+        res.status(404).send('File not found');
+      }
     }
   } catch (error) {
     console.error('访问文件失败:', error);
@@ -279,6 +316,114 @@ app.get('/api/stats', requireAuth, async (req, res) => {
   } catch (error) {
     console.error('获取统计信息失败:', error);
     res.status(500).json({ error: '获取统计信息失败' });
+  }
+});
+
+// 数据恢复API - 扫描uploads目录并恢复丢失的文件记录
+app.post('/api/recover', requireAuth, async (req, res) => {
+  try {
+    const recoveredFiles = [];
+    
+    // 扫描所有可能的uploads目录
+    const uploadDirs = [
+      uploadsDir,
+      backupUploadsDir
+    ];
+    
+    for (const dir of uploadDirs) {
+      if (fs.existsSync(dir)) {
+        const files = await fs.readdir(dir);
+        
+        for (const filename of files) {
+          if (filename.endsWith('.html')) {
+            const filePath = path.join(dir, filename);
+            const stats = await fs.stat(filePath);
+            
+            // 检查文件是否已在数据库中
+            const existingFile = await File.findOne({ where: { filename } });
+            
+            if (!existingFile) {
+              // 创建新的文件记录
+              const fileId = crypto.randomBytes(8).toString('hex');
+              const fileRecord = await File.create({
+                id: fileId,
+                originalName: filename,
+                filename: filename,
+                size: stats.size,
+                mimeType: 'text/html',
+                uploadDate: stats.birthtime,
+                accessCount: 0,
+                lastAccessed: new Date()
+              });
+              
+              recoveredFiles.push({
+                id: fileRecord.id,
+                originalName: fileRecord.originalName,
+                filename: fileRecord.filename,
+                size: fileRecord.size,
+                uploadDate: fileRecord.uploadDate.toISOString(),
+                url: `/view/${fileRecord.filename}`,
+                accessCount: fileRecord.accessCount,
+                lastAccessed: fileRecord.lastAccessed.toISOString()
+              });
+            }
+          }
+        }
+      }
+    }
+    
+    res.json({
+      success: true,
+      message: `成功恢复 ${recoveredFiles.length} 个文件记录`,
+      recoveredFiles
+    });
+    
+  } catch (error) {
+    console.error('数据恢复失败:', error);
+    res.status(500).json({ error: '数据恢复失败' });
+  }
+});
+
+// 获取系统状态信息
+app.get('/api/system/status', requireAuth, async (req, res) => {
+  try {
+    const mainDbExists = fs.existsSync(sequelize.config.storage);
+    const backupDbExists = fs.existsSync(path.join(__dirname, 'database.sqlite'));
+    const mainUploadsExists = fs.existsSync(uploadsDir);
+    const backupUploadsExists = fs.existsSync(backupUploadsDir);
+    
+    const mainUploadsFiles = mainUploadsExists ? 
+      (await fs.readdir(uploadsDir)).filter(f => f.endsWith('.html')).length : 0;
+    const backupUploadsFiles = backupUploadsExists ? 
+      (await fs.readdir(backupUploadsDir)).filter(f => f.endsWith('.html')).length : 0;
+    
+    const dbFileCount = await File.count();
+    
+    res.json({
+      storage: {
+        mainUploadsDir: uploadsDir,
+        backupUploadsDir: backupUploadsDir,
+        mainDbPath: sequelize.config.storage,
+        backupDbPath: path.join(__dirname, 'database.sqlite')
+      },
+      status: {
+        mainDbExists,
+        backupDbExists,
+        mainUploadsExists,
+        backupUploadsExists,
+        mainUploadsFiles,
+        backupUploadsFiles,
+        dbFileCount
+      },
+      environment: {
+        ZEABUR_MOUNT_PATH: !!process.env.ZEABUR_MOUNT_PATH,
+        NODE_ENV: process.env.NODE_ENV || 'development'
+      }
+    });
+    
+  } catch (error) {
+    console.error('获取系统状态失败:', error);
+    res.status(500).json({ error: '获取系统状态失败' });
   }
 });
 

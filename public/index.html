@@ -664,6 +664,8 @@
             <div class="files-section">
                 <h2 class="files-title">
                     📋 已上传的文件
+                    <button class="btn btn-info" onclick="showSystemStatus()" style="margin-left: 10px; font-size: 0.8em;">🔧 系统状态</button>
+                    <button class="btn btn-secondary" onclick="recoverData()" style="margin-left: 10px; font-size: 0.8em;">🔄 数据恢复</button>
                 </h2>
                 <div id="filesList">
                     <div class="empty-state">
@@ -1120,6 +1122,96 @@
                 showToast('复制失败，请手动复制链接', 'error');
             } finally {
                 document.body.removeChild(textarea);
+            }
+        }
+
+        // 数据恢复功能
+        async function recoverData() {
+            if (!confirm('确定要扫描并恢复丢失的文件记录吗？')) {
+                return;
+            }
+            
+            showLoading(true, '正在扫描文件...');
+            
+            try {
+                const response = await fetch('/api/recover', {
+                    method: 'POST'
+                });
+                
+                if (response.status === 401) {
+                    showLoginForm();
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    loadFiles(); // 重新加载文件列表
+                } else {
+                    showToast('数据恢复失败：' + data.error, 'error');
+                }
+            } catch (error) {
+                showToast('数据恢复失败：' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // 显示系统状态
+        async function showSystemStatus() {
+            showLoading(true, '正在获取系统状态...');
+            
+            try {
+                const response = await fetch('/api/system/status');
+                
+                if (response.status === 401) {
+                    showLoginForm();
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                // 创建状态信息弹窗
+                const statusHtml = `
+                    <div style="background: white; padding: 30px; border-radius: 15px; max-width: 600px; margin: 20px auto;">
+                        <h2 style="color: #333; margin-bottom: 20px;">🔧 系统状态</h2>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="color: #666; margin-bottom: 10px;">存储路径</h3>
+                            <p><strong>主上传目录:</strong> ${data.storage.mainUploadsDir}</p>
+                            <p><strong>备用上传目录:</strong> ${data.storage.backupUploadsDir}</p>
+                            <p><strong>主数据库:</strong> ${data.storage.mainDbPath}</p>
+                            <p><strong>备用数据库:</strong> ${data.storage.backupDbPath}</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="color: #666; margin-bottom: 10px;">文件统计</h3>
+                            <p><strong>主目录文件数:</strong> ${data.status.mainUploadsFiles}</p>
+                            <p><strong>备用目录文件数:</strong> ${data.status.backupUploadsFiles}</p>
+                            <p><strong>数据库记录数:</strong> ${data.status.dbFileCount}</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="color: #666; margin-bottom: 10px;">环境信息</h3>
+                            <p><strong>Zeabur挂载:</strong> ${data.environment.ZEABUR_MOUNT_PATH ? '✅ 已启用' : '❌ 未启用'}</p>
+                            <p><strong>运行环境:</strong> ${data.environment.NODE_ENV}</p>
+                        </div>
+                        
+                        <button onclick="this.parentElement.parentElement.remove()" style="background: #4facfe; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">关闭</button>
+                    </div>
+                `;
+                
+                // 显示弹窗
+                const overlay = document.createElement('div');
+                overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 10000;';
+                overlay.innerHTML = statusHtml;
+                document.body.appendChild(overlay);
+                
+            } catch (error) {
+                showToast('获取系统状态失败：' + error.message, 'error');
+            } finally {
+                showLoading(false);
             }
         }
     </script>

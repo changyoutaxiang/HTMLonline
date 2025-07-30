@@ -34,7 +34,7 @@ The application follows a simple monolithic structure:
 ### File Management
 - SQLite database stores file metadata with persistent storage
 - REST API for CRUD operations on files
-- Direct file serving via `/view/:filename` endpoint
+- Direct file serving via `/view/:filename` endpoint (public access, no authentication required)
 - File access tracking and statistics
 - Automatic cleanup when files are deleted
 
@@ -63,9 +63,17 @@ When deployed to Zeabur:
 
 The application is configured for Zeabur deployment with automatic build and start commands. The `zeabur.json` file contains the deployment configuration.
 
+## Authentication & Security
+
+The application implements a session-based authentication system:
+- Admin panel requires password authentication for file management (upload, delete, statistics)
+- Public HTML file viewing via `/view/:filename` links requires no authentication for easy sharing
+- Session management using express-session with configurable timeout
+- Environment variable `LOGIN_PASSWORD` sets the admin password (defaults to 'admin123')
+
 ## Limitations
 
-- No authentication or user management
+- Single admin user authentication (no multi-user support)
 - File storage is local to the server instance (but persistent with Zeabur mounted disk)
 - No built-in backup system
 - No file expiration or cleanup system
@@ -81,5 +89,7 @@ Update the `limits.fileSize` property in the Multer configuration.
 ### Adding Database Persistence
 Consider integrating with a database like MongoDB or PostgreSQL to store file metadata persistently.
 
-### Adding User Authentication
-Implement authentication middleware using JWT or session-based authentication.
+### Modifying Authentication
+The application uses session-based authentication. To modify authentication behavior:
+- Admin routes: Add/remove `requireAuth` middleware in `server.js`
+- Public sharing: Keep `/view/:filename` route without `requireAuth` for public access
