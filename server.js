@@ -55,10 +55,11 @@ const storage = multer.diskStorage({
     cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
-    // 生成唯一文件名
-    const uniqueId = crypto.randomBytes(8).toString('hex');
-    const ext = path.extname(file.originalname);
-    cb(null, `${uniqueId}${ext}`);
+    // 使用文件内容的MD5哈希作为文件名，确保相同文件有相同名称
+    // 临时保存原始文件名，在上传处理中生成哈希
+    const timestamp = Date.now();
+    const tempName = `temp_${timestamp}_${file.originalname}`;
+    cb(null, tempName);
   }
 });
 
@@ -138,12 +139,37 @@ app.post('/api/upload', requireAuth, upload.single('htmlFile'), async (req, res)
   }
 
   try {
+    // 读取临时文件内容，生成MD5哈希作为最终文件名
+    const tempFilePath = req.file.path;
+    const fileContent = fs.readFileSync(tempFilePath);
+    const hash = crypto.createHash('md5').update(fileContent).digest('hex');
+    const ext = path.extname(req.file.originalname);
+    const finalFilename = `${hash}${ext}`;
+    const finalFilePath = path.join(uploadsDir, finalFilename);
+    
+    // 检查是否已存在相同文件
+    let fileRecord = await File.findOne({ where: { filename: finalFilename } });
+    
+    if (fileRecord) {
+      // 文件已存在，删除临时文件，返回现有记录
+      fs.unlinkSync(tempFilePath);
+      return res.json({
+        message: '文件已存在',
+        url: `/view/${fileRecord.filename}`,
+        id: fileRecord.id,
+        filename: fileRecord.filename
+      });
+    }
+    
+    // 移动临时文件到最终位置
+    fs.renameSync(tempFilePath, finalFilePath);
+    
     const fileId = crypto.randomBytes(8).toString('hex');
     
-    const fileRecord = await File.create({
+    fileRecord = await File.create({
       id: fileId,
       originalName: req.file.originalname,
-      filename: req.file.filename,
+      filename: finalFilename,
       size: req.file.size,
       mimeType: req.file.mimetype
     });
