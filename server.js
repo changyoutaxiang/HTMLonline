@@ -166,6 +166,50 @@ app.delete('/api/files/:id', async (req, res) => {
   }
 });
 
+// 处理粘贴的HTML代码
+app.post('/api/paste', async (req, res) => {
+  const { htmlCode, filename } = req.body;
+  
+  if (!htmlCode || typeof htmlCode !== 'string') {
+    return res.status(400).json({ error: '请输入有效的HTML代码' });
+  }
+
+  try {
+    const fileId = crypto.randomBytes(8).toString('hex');
+    const uniqueFilename = `${fileId}.html`;
+    const filePath = path.join(uploadsDir, uniqueFilename);
+    
+    // 将HTML代码保存为文件
+    await fs.writeFile(filePath, htmlCode, 'utf-8');
+    
+    const buffer = Buffer.from(htmlCode, 'utf-8');
+    const fileRecord = await File.create({
+      id: fileId,
+      originalName: filename || `粘贴的HTML_${new Date().toISOString().split('T')[0]}.html`,
+      filename: uniqueFilename,
+      size: buffer.length,
+      mimeType: 'text/html'
+    });
+    
+    res.json({
+      success: true,
+      file: {
+        id: fileRecord.id,
+        originalName: fileRecord.originalName,
+        filename: fileRecord.filename,
+        size: fileRecord.size,
+        uploadDate: fileRecord.uploadDate.toISOString(),
+        url: `/view/${fileRecord.filename}`,
+        accessCount: fileRecord.accessCount,
+        lastAccessed: fileRecord.lastAccessed.toISOString()
+      }
+    });
+  } catch (error) {
+    console.error('粘贴HTML代码失败:', error);
+    res.status(500).json({ error: '保存HTML代码失败' });
+  }
+});
+
 // 获取文件统计信息
 app.get('/api/stats', async (req, res) => {
   try {

@@ -304,6 +304,137 @@
             background: #f44336;
         }
 
+        /* 标签样式 */
+        .tab-container {
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: #666;
+            font-size: 1em;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn.active {
+            color: #4facfe;
+            border-bottom-color: #4facfe;
+            background: rgba(79, 172, 254, 0.1);
+        }
+
+        .tab-btn:hover {
+            background: rgba(79, 172, 254, 0.05);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 粘贴区域样式 */
+        .paste-section {
+            border: 2px dashed #ddd;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #fafafa, #ffffff);
+        }
+
+        .paste-section:hover {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #f0fdf4, #ffffff);
+        }
+
+        .paste-icon {
+            font-size: 4em;
+            color: #10b981;
+            margin-bottom: 20px;
+        }
+
+        .paste-text {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .paste-filename {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .paste-filename:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .html-code-input {
+            width: 100%;
+            min-height: 300px;
+            padding: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+        }
+
+        .html-code-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            background: #ffffff;
+        }
+
+        .paste-btn {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .paste-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .paste-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -327,6 +458,25 @@
                 width: 100%;
                 justify-content: flex-end;
             }
+
+            .tabs {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .tab-btn {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .paste-section {
+                padding: 20px;
+            }
+
+            .html-code-input {
+                min-height: 200px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -338,18 +488,40 @@
         </div>
         
         <div class="content">
-            <div class="upload-section" id="uploadSection">
-                <div class="upload-icon">📁</div>
-                <div class="upload-text">拖拽HTML文件到这里或点击选择文件</div>
-                <input type="file" id="fileInput" class="file-input" accept=".html" />
-                <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
-                    选择文件
-                </button>
+            <!-- 标签切换 -->
+            <div class="tab-container" style="margin-bottom: 30px;">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="upload">📁 文件上传</button>
+                    <button class="tab-btn" data-tab="paste">✏️ 代码粘贴</button>
+                </div>
+            </div>
+
+            <!-- 文件上传区域 -->
+            <div id="uploadTab" class="tab-content active">
+                <div class="upload-section" id="uploadSection">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">拖拽HTML文件到这里或点击选择文件</div>
+                    <input type="file" id="fileInput" class="file-input" accept=".html" />
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                        选择文件
+                    </button>
+                </div>
+            </div>
+
+            <!-- 代码粘贴区域 -->
+            <div id="pasteTab" class="tab-content">
+                <div class="paste-section">
+                    <div class="paste-icon">✏️</div>
+                    <div class="paste-text">直接粘贴HTML代码</div>
+                    <input type="text" id="pasteFilename" class="paste-filename" placeholder="文件名（可选）" maxlength="100">
+                    <textarea id="htmlCodeInput" class="html-code-input" placeholder="在此粘贴您的HTML代码..."></textarea>
+                    <button class="paste-btn" onclick="handlePasteCode()">保存并预览</button>
+                </div>
             </div>
             
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p>正在上传文件...</p>
+                <p id="loadingText">正在处理...</p>
             </div>
             
             <div class="stats-section" id="statsSection">
@@ -400,6 +572,15 @@
             const uploadSection = document.getElementById('uploadSection');
             const fileInput = document.getElementById('fileInput');
 
+            // 标签切换
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    switchTab(tabName);
+                });
+            });
+
             // 拖拽上传
             uploadSection.addEventListener('dragover', function(e) {
                 e.preventDefault();
@@ -425,6 +606,68 @@
                 if (e.target.files.length > 0) {
                     handleFileUpload(e.target.files[0]);
                 }
+            });
+
+            // 代码输入框自动调整高度
+            const codeInput = document.getElementById('htmlCodeInput');
+            if (codeInput) {
+                codeInput.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = this.scrollHeight + 'px';
+                });
+            }
+        }
+
+        function switchTab(tabName) {
+            // 更新标签按钮状态
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabName);
+            });
+
+            // 更新内容区域
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.toggle('active', content.id === tabName + 'Tab');
+            });
+        }
+
+        function handlePasteCode() {
+            const htmlCode = document.getElementById('htmlCodeInput').value;
+            const filename = document.getElementById('pasteFilename').value;
+
+            if (!htmlCode.trim()) {
+                showToast('请输入HTML代码', 'error');
+                return;
+            }
+
+            showLoading(true, '正在保存代码...');
+
+            fetch('/api/paste', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    htmlCode: htmlCode,
+                    filename: filename.trim() || null
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('代码保存成功！', 'success');
+                    loadFiles();
+                    document.getElementById('htmlCodeInput').value = '';
+                    document.getElementById('pasteFilename').value = '';
+                    switchTab('upload'); // 切换回上传标签
+                } else {
+                    showToast('保存失败：' + data.error, 'error');
+                }
+            })
+            .catch(error => {
+                showToast('保存失败：' + error.message, 'error');
+            })
+            .finally(() => {
+                showLoading(false);
             });
         }
 
@@ -561,8 +804,9 @@
             return date.toLocaleString('zh-CN');
         }
 
-        function showLoading(show) {
+        function showLoading(show, text = '正在处理...') {
             document.getElementById('loading').style.display = show ? 'block' : 'none';
+            document.getElementById('loadingText').textContent = text;
         }
 
         function showToast(message, type = 'success') {

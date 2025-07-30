@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻速览 (202507) - 增强阅读版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .card {
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e5e7eb;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+        }
+        .card-theme-sky { background: linear-gradient(135deg, #f0f9ff, #ffffff); }
+        .card-theme-emerald { background: linear-gradient(135deg, #ecfdf5, #ffffff); }
+        .card-theme-blue { background: linear-gradient(135deg, #eff6ff, #ffffff); }
+        .card-theme-rose { background: linear-gradient(135deg, #fff1f2, #ffffff); }
+        .card-theme-indigo { background: linear-gradient(135deg, #eef2ff, #ffffff); }
+        .prose-custom h2 {
+            color: #111827;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .prose-custom p {
+            line-height: 1.8;
+            margin-bottom: 1.25rem;
+            color: #374151;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-8">
+    <header class="text-center mb-12 md:mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-purple-500 to-pink-500">新闻速览</h1>
+        <p class="text-lg text-gray-500 mt-3">2025年7月</p>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <!-- 新闻卡片 1: 微软Edge浏览器 -->
+        <article class="card card-theme-sky col-span-1 lg:col-span-2">
+            <div class="p-8">
+                <div class="prose-custom max-w-none">
+                    <h2>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9V3m0 18a9 9 0 01-9-9m-9 9a9 9 0 019-9" />
+                        </svg>
+                        微软Edge浏览器推出Copilot智能助手模式
+                    </h2>
+                    <blockquote class="border-l-4 border-sky-400 pl-4 italic text-sky-700 mb-4">
+                        微软在Edge浏览器中推出Copilot模式，通过AI智能体功能实现自动化搜索、整合和导航，提升用户浏览效率，同时确保隐私安全。
+                    </blockquote>
+                    <div class="summary-content">
+                        <h4 class="font-semibold text-gray-800 mb-2">核心功能与目标</h4>
+                        <p>微软近日在Edge浏览器中推出了全新的Copilot模式，旨在通过AI技术重塑用户的浏览体验...</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- 新闻卡片 2: 智谱发布GLM-4.5 -->
+        <article class="card card-theme-emerald">
+            <div class="p-8 prose-custom max-w-none">
+                <h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                    智谱发布GLM-4.5，国产开源模型登顶全球第三
+                </h2>
+                <blockquote class="border-l-4 border-emerald-400 pl-4 italic text-emerald-700 mb-4">
+                    智谱深夜无预警发布GLM-4.5和GLM-4.5-Air两款开源模型，参数量分别为355B和106B，综合评测全球第三、国产第一...
+                </blockquote>
+                <div class="summary-content">
+                    <h4 class="font-semibold text-gray-800 mb-2">模型参数与性能</h4>
+                    <p>智谱在深夜无预告的情况下发布了GLM-4.5和GLM-4.5-Air两款开源模型...</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- 新闻卡片 3: Meta专家毕树超谈AI进化 -->
+        <article class="card card-theme-blue">
+            <div class="p-8 prose-custom max-w-none">
+                <h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.657 7.343A8 8 0 0117.657 18.657z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 16.121A3 3 0 1014.12 11.88l-4.242 4.242z" />
+                    </svg>
+                    Meta专家毕树超谈AI进化: AGI曙光已现
+                </h2>
+                <blockquote class="border-l-4 border-blue-400 pl-4 italic text-blue-700 mb-4">
+                    Meta超级智能团队成员毕树超回顾AI发展历程，从AlexNet到Transformer...
+                </blockquote>
+            </div>
+        </article>
+    </main>
+
+    <script>
+        // Script for scroll animations
+        const cards = document.querySelectorAll('.card');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻速览 (202507) - 增强阅读版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .card {
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e5e7eb;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+        }
+        .card-theme-sky { background: linear-gradient(135deg, #f0f9ff, #ffffff); }
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-8">
+    <header class="text-center mb-12 md:mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-purple-500 to-pink-500">新闻速览</h1>
+        <p class="text-lg text-gray-500 mt-3">2025年7月</p>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <article class="card card-theme-sky p-8">
+            <h2 class="text-2xl font-bold mb-4 text-sky-700">🚀 微软Edge浏览器推出Copilot智能助手模式</h2>
+            <p class="text-gray-700 mb-4">
+                微软在Edge浏览器中推出Copilot模式，通过AI智能体功能实现自动化搜索、整合和导航，
+                提升用户浏览效率，同时确保隐私安全。
+            </p>
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h3 class="font-semibold text-blue-800 mb-2">核心功能：</h3>
+                <ul class="list-disc list-inside text-blue-700">
+                    <li>AI自动搜索和整合信息</li>
+                    <li>智能标签页管理</li>
+                    <li>自然语音交互</li>
+                </ul>
+            </div>
+        </article>
+
+        <article class="card card-theme-sky p-8">
+            <h2 class="text-2xl font-bold mb-4 text-emerald-700">📊 智谱发布GLM-4.5，国产开源模型登顶全球第三</h2>
+            <p class="text-gray-700 mb-4">
+                智谱发布GLM-4.5和GLM-4.5-Air两款开源模型，综合评测全球第三、国产第一，
+                API价格低至0.8元/百万tokens。
+            </p>
+            <div class="bg-emerald-50 p-4 rounded-lg">
+                <h3 class="font-semibold text-emerald-800 mb-2">技术亮点：</h3>
+                <ul class="list-disc list-inside text-emerald-700">
+                    <li>355B参数规模</li>
+                    <li>100tokens/秒生成速度</li>
+                    <li>编程任务表现优异</li>
+                </ul>
+            </div>
+        </article>
+    </main>
+</body>
+</html>

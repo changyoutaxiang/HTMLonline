@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px 'PingFang SC'}
+    span.s1 {font: 12.0px 'PingFang SC'}
+    span.s2 {font: 12.0px Helvetica}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="zh-CN"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;<span class="s1">新闻速览</span> (202507) - <span class="s1">增强阅读版</span>&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter', 'Noto Sans SC', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #f3f4f6;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: transform 0.3s ease, box-shadow 0.3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #e5e7eb;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(30px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: opacity 0.6s ease-out, transform 0.6s ease-out;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card.is-visible {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(0);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-6px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Thematic Gradients for Cards */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-theme-sky { background: linear-gradient(135deg, #f0f9ff, #ffffff); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-theme-emerald { background: linear-gradient(135deg, #ecfdf5, #ffffff); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-theme-blue { background: linear-gradient(135deg, #eff6ff, #ffffff); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-theme-rose { background: linear-gradient(135deg, #fff1f2, #ffffff); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-theme-indigo { background: linear-gradient(135deg, #eef2ff, #ffffff); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.prose-custom h2 {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #111827;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 0.75rem;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.prose-custom p {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.8;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 1.25rem; /* Increased paragraph spacing */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #374151;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.prose-custom .summary-content p:first-of-type::first-letter {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 3.5em; /* Larger font size for drop cap */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>float: left;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>line-height: 0.8;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-right: 0.1em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding-top: 0.1em;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Thematic Drop Caps */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-theme-sky .prose-custom .summary-content p:first-of-type::first-letter { color: #0ea5e9; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-theme-emerald .prose-custom .summary-content p:first-of-type::first-letter { color: #10b981; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-theme-blue .prose-custom .summary-content p:first-of-type::first-letter { color: #3b82f6; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-theme-rose .prose-custom .summary-content p:first-of-type::first-letter { color: #ec4899; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-theme-indigo .prose-custom .summary-content p:first-of-type::first-letter { color: #6366f1; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.prose-custom blockquote {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 1rem 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-left: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.05rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 500;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.summary-subheading {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #111827;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 0.75rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.1rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding-bottom: 0.25rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 2px solid rgba(0,0,0,0.05);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Thematic Blockquotes */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.blockquote-theme-sky { border-left: 4px solid #38bdf8; background-color: #e0f2fe; color: #0c4a6e; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.blockquote-theme-emerald { border-left: 4px solid #34d399; background-color: #d1fae5; color: #065f46; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.blockquote-theme-blue { border-left: 4px solid #60a5fa; background-color: #dbeafe; color: #1e40af; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.blockquote-theme-rose { border-left: 4px solid #f472b6; background-color: #fce7f3; color: #9d174d; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.blockquote-theme-indigo { border-left: 4px solid #818cf8; background-color: #e0e7ff; color: #3730a3; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key-data-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key-data-item {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: rgba(255, 255, 255, 0.7);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 1rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #e5e7eb;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 0.75rem;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key-data-item .icon { flex-shrink: 0; width: 2rem; height: 2rem; display: grid; place-items: center; border-radius: 8px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key-data-item-title { font-weight: 600; color: #374151; margin-bottom: 0.1rem; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key-data-item-content { font-size: 0.9rem; color: #6b7280; }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Thematic Icons in Key Data */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key-data-icon-sky { background-color: #bae6fd; color: #0369a1; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key-data-icon-emerald { background-color: #a7f3d0; color: #047857; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key-data-icon-blue { background-color: #bfdbfe; color: #1d4ed8; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key-data-icon-rose { background-color: #fbcfe8; color: #9d174d; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key-data-icon-indigo { background-color: #c7d2fe; color: #4338ca; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.toggle-section header { cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; transition: background-color 0.2s ease; border-radius: 8px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.toggle-section header:hover { background-color: rgba(255, 255, 255, 0.8); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.toggle-section .content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; padding: 0 0.5rem; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.toggle-section.open .content { max-height: 1000px; padding: 0.5rem; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.toggle-icon { transition: transform 0.3s ease; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.toggle-section.open .toggle-icon { transform: rotate(90deg); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.tag-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; font-weight: 600; }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.tag-essence .tag-title { color: #4f46e5; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.tag-plain .tag-title { color: #16a34a; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="p-4 sm:p-6 md:p-8"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;header class="text-center mb-12 md:mb-16"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1 class="text-4xl md:text-5xl font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-purple-500 to-pink-500"&gt;<span class="s1">新闻速览</span>&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p class="text-lg text-gray-500 mt-3"&gt;2025<span class="s1">年</span>7<span class="s1">月</span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- <span class="s1">新闻卡片</span> 1: <span class="s1">微软</span>Edge<span class="s1">浏览器</span> --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;article class="card card-theme-sky col-span-1 lg:col-span-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="prose-custom max-w-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9V3m0 18a9 9 0 01-9-9m-9 9a9 9 0 019-9" /&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span><span class="s1">微软</span>Edge<span class="s1">浏览器推出</span>Copilot<span class="s1">智能助手模式</span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;blockquote class="blockquote-theme-sky"&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                        </span>&lt;p&gt;</span>微软在<span class="s2">Edge</span>浏览器中推出<span class="s2">Copilot</span>模式，通过<span class="s2">AI</span>智能体功能实现自动化搜索、整合和导航，提升用户浏览效率，同时确保隐私安全。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/blockquote&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="key-data-grid my-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="key-data-item"&gt;&lt;div class="icon key-data-icon-sky"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" /&gt;&lt;/svg&gt;&lt;/div&gt;&lt;div&gt;&lt;div class="key-data-item-title"&gt;<span class="s1">租房搜索上限</span>&lt;/div&gt;&lt;div class="key-data-item-content"&gt;<span class="s1">月租不超过</span>5000<span class="s1">美元</span>&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="key-data-item"&gt;&lt;div class="icon key-data-icon-sky"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h.01M7 11h.01M16 3h.01M16 7h.01M16 11h.01M12 3h.01M12 7h.01M12 11h.01M3 21h18M3 17h18M3 13h18" /&gt;&lt;/svg&gt;&lt;/div&gt;&lt;div&gt;&lt;div class="key-data-item-title"&gt;<span class="s1">传统浏览痛点</span>&lt;/div&gt;&lt;div class="key-data-item-content"&gt;<span class="s1">常打开</span>30-40<span class="s1">个标签页</span>&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="key-data-item"&gt;&lt;div class="icon key-data-icon-sky"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4H5z" /&gt;&lt;/svg&gt;&lt;/div&gt;&lt;div&gt;&lt;div class="key-data-item-title"&gt;<span class="s1">价格</span>&lt;/div&gt;&lt;div class="key-data-item-content"&gt;<span class="s1">免费开放</span>&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="summary-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h4 class="summary-subheading"&gt;<span class="s1">核心功能与目标</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                        </span>&lt;p&gt;</span>微软近日在<span class="s2">Edge</span>浏览器中推出了全新的<span class="s2">Copilot</span>模式，旨在通过<span class="s2">AI</span>技术重塑用户的浏览体验。<span class="s2">Copilot</span>模式是一个多层级的混合智能体功能，用户只需输入需求，如<span class="s2">“</span>在洛杉矶市区找一个三室两卫、月租不超过<span class="s2">5000</span>美元的房子<span class="s2">”</span>，<span class="s2">Copilot</span>即可自动执行搜索、整合并给出对比结果。这一功能还支持标签筛选和意图理解，帮助用户从繁琐的标签页管理中解放出来。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h4 class="summary-subheading"&gt;<span class="s1">交互体验升级</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                        </span>&lt;p&gt;</span>传统浏览器使用中<span class="s2">,</span>用户常需打开<span class="s2">30</span>、<span class="s2">40</span>个标签页逐一筛选<span class="s2">,</span>而<span class="s2">Copilot</span>模式通过自动化操作和<span class="s2">AI</span>的整合能力显著提升效率。启用<span class="s2">Copilot</span>模式后<span class="s2">,Edge</span>的新标签页将变为一个简洁的输入框<span class="s2">,</span>整合了聊天、搜索和导航功能。<span class="s2">Copilot</span>能理解用户意图<span class="s2">,</span>并查看所有打开的标签页以全面了解用户需求。例如<span class="s2">,</span>在研究度假酒店时<span class="s2">,</span>用户可通过与<span class="s2">Copilot</span>对话快速筛选出最符合条件的选项。此外<span class="s2">,Copilot</span>支持自然语音导航<span class="s2">,</span>用户只需说出需求<span class="s2">,</span>即可减少点击和输入操作。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h4 class="summary-subheading"&gt;<span class="s1">未来展望与隐私</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                        </span>&lt;p&gt;</span>未来<span class="s2">,Copilot</span>还将支持访问更多浏览器上下文信息<span class="s2">(</span>如历史记录<span class="s2">),</span>实现更高级的个性化服务<span class="s2">,</span>例如自动完成桨板租赁的搜索、预订及天气查询。<span class="s2">Copilot</span>模式还允许用户在任意网页调用其功能<span class="s2">,</span>动态面板的设计确保原始页面可见<span class="s2">,</span>减少干扰。它还能引导用户完成任务<span class="s2">,</span>并将浏览历史组织成主题旅程<span class="s2">,</span>提供下一步建议。微软强调隐私安全<span class="s2">,</span>用户数据受严格保护<span class="s2">,</span>且可随时开关<span class="s2">Copilot</span>模式。目前<span class="s2">,</span>该功能已免费开放<span class="s2">,</span>并将持续迭代优化。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="mt-6 space-y-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="toggle-section tag-essence open"&gt;&lt;header&gt;&lt;div class="tag-title"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-7h3m-3 4h3m-3-8h3m-3 4h3M9 7h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2z" /&gt;&lt;/svg&gt;<span class="s1">本质</span>&lt;/div&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /&gt;&lt;/svg&gt;&lt;/header&gt;&lt;div class="content"&gt;&lt;p class="text-sm text-gray-600"&gt;<span class="s1">微软</span>Edge<span class="s1">的</span>Copilot<span class="s1">模式本质是用</span>AI<span class="s1">重构人机交互逻辑，将传统</span>“<span class="s1">用户主动搜索</span>+<span class="s1">手动筛选</span>”<span class="s1">的线性流程，升级为</span>“<span class="s1">需求描述</span>-AI<span class="s1">代理执行</span>”<span class="s1">的闭环服务。其核心突破在于两点：一是通过意图理解将碎片化操作（如开</span>30<span class="s1">个标签比价）整合为单一任务，二是通过多模态交互（语音、文字）降低操作门槛，本质上是把浏览器从</span>“<span class="s1">信息陈列馆</span>”<span class="s1">变成了</span>“<span class="s1">智能任务管家</span>”<span class="s1">。</span>&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="toggle-section tag-plain open"&gt;&lt;header&gt;&lt;div class="tag-title"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /&gt;&lt;/svg&gt;<span class="s1">白话</span>&lt;/div&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /&gt;&lt;/svg&gt;&lt;/header&gt;&lt;div class="content"&gt;&lt;p class="text-sm text-gray-600"&gt;<span class="s1">这就像你的浏览器从一个需要你手动翻阅的</span>“<span class="s1">图书馆</span>”<span class="s1">，升级成了一个能听懂你话的</span>“<span class="s1">私人图书管理员</span>”<span class="s1">。你不用再自己跑遍几十个书架（标签页）找资料，只要告诉管理员</span>“<span class="s1">我要找什么</span>”<span class="s1">，他就能迅速把最相关的几本书直接递到你面前。</span>&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/article&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- <span class="s1">新闻卡片</span> 2: <span class="s1">智谱发布</span>GLM-4.5 --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;article class="card card-theme-emerald"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-8 prose-custom max-w-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /&gt;&lt;/svg&gt;<span class="s1">智谱发布</span>GLM-4.5<span class="s1">，国产开源模型登顶全球第三</span>&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>&lt;blockquote class="blockquote-theme-emerald"&gt;&lt;p&gt;<span class="s1">智谱深夜无预警发布</span>GLM-4.5<span class="s1">和</span>GLM-4.5-Air<span class="s1">两款开源模型，参数量分别为</span>355B<span class="s1">和</span>106B<span class="s1">，综合评测全球第三、国产第一，</span>API<span class="s1">价格低至</span>0.8<span class="s1">元</span>/<span class="s1">百万</span>tokens<span class="s1">，生成速度达</span>100tokens/<span class="s1">秒，并在编程任务中表现优异。</span>&lt;/p&gt;&lt;/blockquote&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="summary-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="summary-subheading"&gt;<span class="s1">模型参数与性能</span>&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;<span class="s1">智谱在深夜无预告的情况下发布了</span>GLM-4.5<span class="s1">和</span>GLM-4.5-Air<span class="s1">两款开源模型</span>,<span class="s1">采用</span>MIT<span class="s1">协议全面开源。</span>GLM-4.5<span class="s1">总参数量为</span>355B,<span class="s1">激活参数</span>32B,<span class="s1">而</span>GLM-4.5-Air<span class="s1">参数量为</span>106B,<span class="s1">激活参数</span>12B<span class="s1">。尽管参数量仅为</span>DeepSeek-R1<span class="s1">的</span>1/2<span class="s1">和</span>Kimi-K2<span class="s1">的</span>1/3,<span class="s1">但</span>GLM-4.5<span class="s1">在综合评测中表现优异</span>,<span class="s1">位列全球模型第三、国产模型第一</span>,<span class="s1">成为开源模型的</span>SOTA<span class="s1">。</span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="summary-subheading"&gt;<span class="s1">核心技术与训练</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;p&gt;</span>该模型在<span class="s2">15</span>万亿<span class="s2">token</span>的通用数据上进行了预训练<span class="s2">,</span>并在代码、推理、智能体等领域的<span class="s2">8</span>万亿<span class="s2">token</span>数据上进行了针对性训练<span class="s2">,</span>最后通过强化学习进一步提升了推理、代码和智能体能力。在编程任务测试中<span class="s2">,GLM-4.5</span>与<span class="s2">Claude-4-Sonnet</span>、<span class="s2">Kimi-K2</span>和<span class="s2">Qwen3-Coder</span>进行了对比<span class="s2">,</span>结果显示其在<span class="s2">52</span>个编程开发任务中表现国内最佳<span class="s2">,</span>多数场景可替代<span class="s2">Claude-4-Sonnet,</span>并显著优于<span class="s2">K2</span>和<span class="s2">Qwen3-Coder</span>。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="summary-subheading"&gt;<span class="s1">商业化与生态</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;p&gt;API</span>定价极具竞争力<span class="s2">,</span>输入价格低至<span class="s2">0.8</span>元<span class="s2">/</span>百万<span class="s2">tokens,</span>输出价格为<span class="s2">2</span>元<span class="s2">/</span>百万<span class="s2">tokens,</span>生成速度最高可达<span class="s2">100tokens/</span>秒。智谱还公开了测试题目和<span class="s2">Agent</span>轨迹<span class="s2">,</span>确保透明度<span class="s2">,</span>供用户验证复现。普通用户可在<span class="s2">z.ai</span>上免费使用该模型<span class="s2">,</span>智谱此次发布不仅展示了技术实力<span class="s2">,</span>还以高性价比和开源策略推动生态发展<span class="s2">,</span>成为未来搭配<span class="s2">Claude Code</span>的理想选择。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="mt-6 space-y-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="toggle-section tag-essence open"&gt;&lt;header&gt;&lt;div class="tag-title"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-7h3m-3 4h3m-3-8h3m-3 4h3M9 7h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2z" /&gt;&lt;/svg&gt;<span class="s1">本质</span>&lt;/div&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /&gt;&lt;/svg&gt;&lt;/header&gt;&lt;div class="content"&gt;&lt;p class="text-sm text-gray-600"&gt;<span class="s1">国产</span>AI<span class="s1">模型的快速崛起实质是技术自主与商业策略的双重突围</span>——<span class="s1">通过开源降低生态门槛、高性价比抢占市场，同时以垂直领域优化（如编程）形成差异化竞争力。这背后是</span>“<span class="s1">以应用换生态，以生态促研发</span>”<span class="s1">的良性循环，旨在全球</span>AI<span class="s1">竞赛中弯道超车。</span>&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="toggle-section tag-plain open"&gt;&lt;header&gt;&lt;div class="tag-title"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /&gt;&lt;/svg&gt;<span class="s1">白话</span>&lt;/div&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /&gt;&lt;/svg&gt;&lt;/header&gt;&lt;div class="content"&gt;&lt;p class="text-sm text-gray-600"&gt;<span class="s1">这相当于国产的一个</span>“<span class="s1">武林高手</span>”<span class="s1">横空出世，不仅内功深厚（性能强劲，全球第三），而且学费便宜得惊人（</span>API<span class="s1">价格低），还把武功秘籍（代码）免费公开了。尤其擅长写代码，以后程序员们多了一个物美价廉的好帮手。</span>&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/article&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- <span class="s1">新闻卡片</span> 3: Meta<span class="s1">专家毕树超谈</span>AI<span class="s1">进化</span> --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;article class="card card-theme-blue"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-8 prose-custom max-w-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.657 7.343A8 8 0 0117.657 18.657z" /&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9.879 16.121A3 3 0 1014.12 11.88l-4.242 4.242z" /&gt;&lt;/svg&gt;Meta<span class="s1">专家毕树超谈</span>AI<span class="s1">进化</span>: AGI<span class="s1">曙光已现</span>&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;blockquote class="blockquote-theme-blue"&gt;&lt;p&gt;Meta<span class="s1">超级智能团队成员毕树超回顾</span>AI<span class="s1">发展历程，从</span>AlexNet<span class="s1">到</span>Transformer<span class="s1">，强调算力和数据的重要性，并预测</span>2025<span class="s1">年</span>AGI(<span class="s1">通用人工智能</span>)<span class="s1">将实现，认为智能并非人类独有，</span>AI<span class="s1">影响被低估。</span>&lt;/p&gt;&lt;/blockquote&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="summary-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="summary-subheading"&gt;AI<span class="s1">发展回顾</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;p&gt;Meta</span>超级智能团队成员毕树超近期在哥伦比亚大学和哈佛大学发表演讲<span class="s2">,</span>系统回顾了过去<span class="s2">15</span>年<span class="s2">AI</span>技术的发展历程<span class="s2">,</span>并展望了未来趋势。他认为<span class="s2">,</span>从<span class="s2">2012</span>年<span class="s2">AlexNet</span>的突破性表现开始<span class="s2">,</span>深度学习革命正式拉开帷幕<span class="s2">,</span>随后<span class="s2">Word2Vec</span>、<span class="s2">GAN</span>、<span class="s2">ResNet</span>等技术的出现进一步推动了<span class="s2">AI</span>的发展。<span class="s2">2017</span>年<span class="s2">Transformer</span>架构的提出成为重要转折点<span class="s2">,</span>解决了并行训练和梯度消失的问题<span class="s2">,</span>为后续<span class="s2">GPT</span>系列模型的成功奠定了基础。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="summary-subheading"&gt;Scaling Law<span class="s1">的重要性</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;p&gt;</span>毕树超特别强调了<span class="s2">Scaling Law</span>的重要性<span class="s2">,</span>该定律表明算力、参数量和数据量的增加会线性降低损失函数<span class="s2">,</span>精准预测了<span class="s2">GPT-4</span>的性能。他认为<span class="s2">,AI</span>的发展本质上是算力碾压人类精巧设计算法的过程<span class="s2">,</span>而智能的分布类似于幂律曲线<span class="s2">,</span>模型通过捕获数据中的高阶模式实现<span class="s2">“</span>能力涌现<span class="s2">”</span>。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="summary-subheading"&gt;AGI<span class="s1">的实现与挑战</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;p&gt;</span>在谈到<span class="s2">AGI(</span>通用人工智能<span class="s2">)</span>时<span class="s2">,</span>毕树超分享了自己的心路历程。他最初对<span class="s2">AGI</span>持怀疑态度<span class="s2">,</span>但随着对<span class="s2">AI</span>理解的加深<span class="s2">,</span>逐渐改变了看法。他认为人脑并非独一无二<span class="s2">,</span>只是生物进化的结果<span class="s2">,</span>而真正关键的因素在于系统的规模。他预测<span class="s2">2025</span>年<span class="s2">AGI</span>将实现<span class="s2">,</span>并指出高质量人类数据的稀缺是当前的主要挑战<span class="s2">,</span>但通过计算机与环境的交互自动生成数据可能是解决方案。毕树超还讨论了强化学习和自监督学习的进展<span class="s2">,</span>指出深度神经网络在高维空间中的优化问题已不再是障碍<span class="s2">,</span>过参数化反而成为优势。他认为<span class="s2">,</span>预测本身就是一种压缩和理解<span class="s2">,</span>大语言模型通过预测下一个词来压缩语言模式<span class="s2">,</span>这与人类理解世界的方式类似。最后<span class="s2">,</span>他总结道<span class="s2">,</span>过去十年<span class="s2">AI</span>领域打破了许多误解<span class="s2">,</span>未来将继续沿着算力和数据驱动的方向发展<span class="s2">,AGI</span>的曙光已经显现。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="mt-6 space-y-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="toggle-section tag-essence open"&gt;&lt;header&gt;&lt;div class="tag-title"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-7h3m-3 4h3m-3-8h3m-3 4h3M9 7h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2z" /&gt;&lt;/svg&gt;<span class="s1">本质</span>&lt;/div&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /&gt;&lt;/svg&gt;&lt;/header&gt;&lt;div class="content"&gt;&lt;p class="text-sm text-gray-600"&gt;AI<span class="s1">的进化本质是</span>“<span class="s1">暴力美学</span>”<span class="s1">的胜利</span>,<span class="s1">即依靠指数级增长的算力和数据规模</span>,<span class="s1">而非依赖人类设计的精巧算法</span>,<span class="s1">来驱动智能涌现。</span>AGI<span class="s1">的实现不再是哲学问题</span>,<span class="s1">而是一个可以通过</span>“<span class="s1">大力出奇迹</span>”<span class="s1">解决的工程问题</span>,<span class="s1">其核心瓶颈已从算法设计转向高质量数据的持续供给。</span>&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="toggle-section tag-plain open"&gt;&lt;header&gt;&lt;div class="tag-title"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /&gt;&lt;/svg&gt;<span class="s1">白话</span>&lt;/div&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /&gt;&lt;/svg&gt;&lt;/header&gt;&lt;div class="content"&gt;&lt;p class="text-sm text-gray-600"&gt;<span class="s1">这就像专家在说，造出</span>“<span class="s1">终结者</span>”<span class="s1">那样的超级智能，关键不在于模仿人脑的</span>“<span class="s1">灵感</span>”<span class="s1">，而在于用足够多的电和数据去</span>“<span class="s1">硬堆</span>”<span class="s1">。只要算力够猛、数据管够，</span>AI<span class="s1">就能自己</span>“<span class="s1">悟道</span>”<span class="s1">，实现通用人工智能只是个时间问题，而且这个时间可能比我们想的要快得多。</span>&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/article&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- <span class="s1">新闻卡片</span> 4: <span class="s1">字节开源扣子</span> --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;article class="card card-theme-rose"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>&lt;div class="p-8 prose-custom max-w-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /&gt;&lt;/svg&gt;<span class="s1">字节开源</span>AI<span class="s1">开发平台扣子助力智能体开发</span>&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;blockquote class="blockquote-theme-rose"&gt;&lt;p&gt;<span class="s1">字节跳动开源</span>AI Agent<span class="s1">开发平台扣子</span>(Coze),<span class="s1">提供可视化无代码开发环境</span>,<span class="s1">支持多种大模型和工具</span>,<span class="s1">开发者可快速构建智能客服等应用并一键分享至主流平台。</span>&lt;/p&gt;&lt;/blockquote&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="summary-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="summary-subheading"&gt;<span class="s1">平台核心功能</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;p&gt;</span>字节跳动推出的<span class="s2">AI Agent</span>开发平台扣子<span class="s2">(Coze)</span>现已开源并支持商业化<span class="s2">,</span>为开发者提供一站式可视化开发环境。扣子集成多种大模型和工具<span class="s2">,</span>支持无代码或低代码开发<span class="s2">,</span>用户可通过现成模板快速构建智能体<span class="s2">,</span>涵盖营销、客服、教育等上百种应用场景。开发完成后<span class="s2">,</span>智能体可一键分享至微信、抖音等主流平台。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="summary-subheading"&gt;<span class="s1">技术架构与优势</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;p&gt;</span>以智能客服为例<span class="s2">,</span>开发者无需编写代码<span class="s2">,</span>仅需选择模板、配置变量、数据库和长期记忆功能即可完成定制。扣子还支持多语言语音播报和用户输入方式设置<span class="s2">,</span>进一步提升交互体验。平台后端采用<span class="s2">Golang,</span>前端基于<span class="s2">React + TypeScript,</span>架构灵活且高性能<span class="s2">,</span>适合复杂业务需求。扣子的功能模块丰富<span class="s2">,</span>包括模型服务、智能体构建、工作流开发等<span class="s2">,</span>支持插件、知识库等资源的集成<span class="s2">,</span>有效解决模型幻觉问题。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="summary-subheading"&gt;<span class="s1">开源与生态</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;p&gt;</span>开源版本为开发者提供了完整的框架和<span class="s2">API,</span>可快速启动<span class="s2">AI Agent</span>项目。无论是新手还是资深开发者<span class="s2">,</span>都能通过扣子高效实现<span class="s2">AI</span>应用的开发和部署。开源地址和体验地址已公布<span class="s2">,</span>开发者可自由探索这一强大的<span class="s2">AI</span>开发工具。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>&lt;div class="mt-6 space-y-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="toggle-section tag-essence open"&gt;&lt;header&gt;&lt;div class="tag-title"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-7h3m-3 4h3m-3-8h3m-3 4h3M9 7h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2z" /&gt;&lt;/svg&gt;<span class="s1">本质</span>&lt;/div&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /&gt;&lt;/svg&gt;&lt;/header&gt;&lt;div class="content"&gt;&lt;p class="text-sm text-gray-600"&gt;<span class="s1">字节开源</span>AI<span class="s1">开发平台</span>“<span class="s1">扣子</span>”<span class="s1">实质是降低</span>AI<span class="s1">应用开发门槛的</span>“<span class="s1">基础设施工具包</span>”<span class="s1">。其核心并非技术创新</span>,<span class="s1">而是通过开源生态</span>+<span class="s1">无代码设计</span>,<span class="s1">将大模型能力封装成乐高式模块</span>,<span class="s1">解决</span>AI<span class="s1">落地</span>“<span class="s1">最后一公里</span>”<span class="s1">的问题。</span>&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="toggle-section tag-plain open"&gt;&lt;header&gt;&lt;div class="tag-title"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /&gt;&lt;/svg&gt;<span class="s1">白话</span>&lt;/div&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /&gt;&lt;/svg&gt;&lt;/header&gt;&lt;div class="content"&gt;&lt;p class="text-sm text-gray-600"&gt;<span class="s1">这好比手机厂商把摄像头模组、处理器、屏幕全拆成标准零件</span>(<span class="s1">开源</span>),<span class="s1">再附赠美图秀秀</span>(<span class="s1">无代码工具</span>)<span class="s1">。普通人不用懂光学原理</span>,<span class="s1">拖拽几下就能拼出拍照手机。字节扮演的不是发明相机的柯达</span>,<span class="s1">而是提供</span>“<span class="s1">零件超市</span>+<span class="s1">说明书</span>”<span class="s1">的华强北</span>,<span class="s1">赌的是未来人人都需要定制</span>AI<span class="s1">助理的时代红利。</span>&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/article&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- <span class="s1">新闻卡片</span> 5: <span class="s1">腾讯发布</span>Tairos --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;article class="card card-theme-indigo"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-8 prose-custom max-w-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.28 9.099c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /&gt;&lt;/svg&gt;<span class="s1">腾讯发布具身智能平台</span>Tairos<span class="s1">，助力机器人行业发展</span>&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;blockquote class="blockquote-theme-indigo"&gt;&lt;p&gt;<span class="s1">腾讯</span>Robotics X<span class="s1">实验室在世界人工智能大会上发布具身智能开放平台</span>Tairos,<span class="s1">旨在通过模块化软件平台为机器人行业提供通用开发工具</span>,<span class="s1">推动行业技术发展</span>,<span class="s1">而非直接商业化盈利。</span>&lt;/p&gt;&lt;/blockquote&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="summary-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="summary-subheading"&gt;<span class="s1">平台定位与目标</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;p&gt;</span>在世界人工智能大会<span class="s2">(WAIC)</span>上<span class="s2">,</span>腾讯<span class="s2">Robotics X</span>实验室正式发布了具身智能开放平台<span class="s2">Tairos,</span>代号<span class="s2">“</span>钛螺丝<span class="s2">”</span>。该平台是一个软件平台<span class="s2">,</span>旨在为机器人行业提供通用的开发工具<span class="s2">,</span>而非直接商业化盈利。腾讯首席科学家张正友表示<span class="s2">,</span>机器人行业目前尚未进入<span class="s2">“iPhone</span>时刻<span class="s2">”,</span>甚至还未达到<span class="s2">“</span>大哥大<span class="s2">”</span>阶段<span class="s2">,</span>因此腾讯选择通过开放平台的方式<span class="s2">,</span>为行业探索者提供技术支持。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="summary-subheading"&gt;<span class="s1">核心技术架构</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;p&gt;Tairos</span>平台由三大核心模型组成<span class="s2">:</span>右脑<span class="s2">(</span>多模态感知模型<span class="s2">)</span>、左脑<span class="s2">(</span>规划大模型<span class="s2">)</span>和小脑<span class="s2">(</span>感知行动联合大模型<span class="s2">),</span>分别负责环境感知、任务规划和行动执行。其中<span class="s2">,</span>规划大模型在复杂任务中的成功率达到了<span class="s2">80%,</span>超过了<span class="s2">GPT-40</span>等闭源系统。此外<span class="s2">,</span>平台还提供云端仿真工具链<span class="s2">,</span>帮助开发者高效验证算法。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4 class="summary-subheading"&gt;<span class="s1">战略与未来规划</span>&lt;/h4&gt;</p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;p&gt;</span>张正友强调<span class="s2">,</span>机器人行业目前仍处于探索阶段<span class="s2">,</span>过早锁定<span class="s2">“</span>人形<span class="s2">”</span>形态可能限制技术潜力。腾讯希望通过<span class="s2">Tairos</span>平台推动行业在效率、形态和技术上的多样化发展。尽管当前具身智能领域热度高涨<span class="s2">,</span>腾讯仍保持战略定力<span class="s2">,</span>计划在未来三年内进一步提升技术成熟度<span class="s2">,</span>以支持养老等复杂场景应用。腾讯的这一举措被视为对行业长期发展的战略投资<span class="s2">,</span>旨在通过开放技术积累<span class="s2">,</span>推动整个行业更快迈向<span class="s2">“iPhone</span>时刻<span class="s2">”</span>。<span class="s2">&lt;/p&gt;</span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="mt-6 space-y-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="toggle-section tag-essence open"&gt;&lt;header&gt;&lt;div class="tag-title"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-7h3m-3 4h3m-3-8h3m-3 4h3M9 7h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2z" /&gt;&lt;/svg&gt;<span class="s1">本质</span>&lt;/div&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /&gt;&lt;/svg&gt;&lt;/header&gt;&lt;div class="content"&gt;&lt;p class="text-sm text-gray-600"&gt;<span class="s1">腾讯发布</span>Tairos<span class="s1">平台的实质是用</span>“<span class="s1">开源基建</span>”<span class="s1">思维抢占机器人行业的底层技术标准话语权。其核心逻辑在于</span>:<span class="s1">当行业尚处</span>“<span class="s1">石器时代</span>”<span class="s1">时</span>,<span class="s1">通过提供免费工具链培养开发者生态</span>,<span class="s1">未来在技术爆发期自然成为行业基础设施的制定者。这类似于安卓系统早期通过开放策略占领移动互联网入口。</span>&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="toggle-section tag-plain open"&gt;&lt;header&gt;&lt;div class="tag-title"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /&gt;&lt;/svg&gt;<span class="s1">白话</span>&lt;/div&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /&gt;&lt;/svg&gt;&lt;/header&gt;&lt;div class="content"&gt;&lt;p class="text-sm text-gray-600"&gt;<span class="s1">就像早期铁路公司免费送铁轨给淘金者</span>,<span class="s1">表面是做慈善</span>,<span class="s1">实则是让所有矿车都必须用它的轨距。等遍地是黄金时</span>,<span class="s1">谁控制了铁轨</span>,<span class="s1">谁就控制了财富的流向。腾讯现在就是那个修铁路的。</span>&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/article&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;footer class="text-center mt-12 text-gray-500 text-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;&amp;copy; 2025 <span class="s1">新闻速览。内容根据提供材料生成。</span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/footer&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Script for scroll animations</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const cards = document.querySelectorAll('.card');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const observer = new IntersectionObserver(entries =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>entries.forEach(entry =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (entry.isIntersecting) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>entry.target.classList.add('is-visible');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>observer.unobserve(entry.target);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}, {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>threshold: 0.1</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>cards.forEach(card =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>observer.observe(card);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Script for toggle sections</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const toggleSections = document.querySelectorAll('.toggle-section');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>toggleSections.forEach(section =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const header = section.querySelector('header');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>header.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>section.classList.toggle('open');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
