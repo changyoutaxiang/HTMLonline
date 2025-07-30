@@ -27,7 +27,8 @@ The application follows a simple monolithic structure:
 ### File Upload System
 - Uses Multer middleware for file handling
 - Supports both drag-and-drop and click-to-upload
-- Generates unique filenames to prevent conflicts
+- Uses MD5 hash of file content as filename to ensure consistency
+- Automatic file deduplication - identical files share the same filename
 - File size limit: 10MB
 - Only accepts HTML files
 
@@ -70,6 +71,30 @@ The application implements a session-based authentication system:
 - Public HTML file viewing via `/view/:filename` links requires no authentication for easy sharing
 - Session management using express-session with configurable timeout
 - Environment variable `LOGIN_PASSWORD` sets the admin password (defaults to 'admin123')
+
+## File Migration and Compatibility
+
+The application includes automatic migration functionality to ensure sharing links remain valid across deployments:
+
+### Automatic File Migration
+- On startup, the system detects files with old random filenames (16-character hex strings)
+- Automatically converts them to MD5 hash-based filenames
+- Preserves all file metadata and access statistics
+- Removes duplicate files with identical content
+- Ensures backward compatibility with existing sharing links
+
+### Migration Process
+1. **Detection**: Identifies files using the old random naming scheme
+2. **Hash Generation**: Calculates MD5 hash of file content
+3. **File Renaming**: Renames files to use hash-based names
+4. **Database Update**: Updates file records in the database
+5. **Deduplication**: Removes duplicate files with identical content
+
+### Benefits
+- **Persistent Sharing Links**: Links remain valid after redeployment
+- **Storage Efficiency**: Automatic deduplication saves disk space
+- **Consistency**: Same file content always has the same filename
+- **Zero Downtime**: Migration happens automatically during startup
 
 ## Limitations
 
