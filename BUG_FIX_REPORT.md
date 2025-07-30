@@ -122,8 +122,40 @@ database.sqlite
 - 🔄 **自动迁移**: 系统会自动将现有数据迁移到挂载路径
 - 💰 **费用**: 持久化存储会产生额外费用，请参考Zeabur定价
 
+## 新发现的严重Bug: 文件链接不一致问题
+
+### 问题描述
+用户报告重新部署后，同一个HTML文件的链接地址发生变化：
+- 旧地址失效：`https://htmlonline.zeabur.app/view/e859714a4712d1aa.html`
+- 新地址有效：`https://htmlonline.zeabur.app/view/50e64b21fd980131f113dcb5b1bcc84f.html`
+
+### 根本原因
+代码中存在两套不同的文件名生成策略：
+1. **文件上传功能** (`/api/upload`): 使用MD5哈希生成文件名，确保相同内容的文件有相同的链接
+2. **代码粘贴功能** (`/api/paste`): 使用随机字符串生成文件名，导致相同内容每次生成不同的链接
+
+### 修复方案
+统一文件名生成策略，将代码粘贴功能也改为使用MD5哈希：
+
+```javascript
+// 修复前（随机文件名）
+const fileId = crypto.randomBytes(8).toString('hex');
+const uniqueFilename = `${fileId}.html`;
+
+// 修复后（MD5哈希文件名）
+const buffer = Buffer.from(htmlCode, 'utf-8');
+const hash = crypto.createHash('md5').update(buffer).digest('hex');
+const uniqueFilename = `${hash}.html`;
+```
+
+### 修复效果
+- ✅ 相同内容的HTML文件始终生成相同的链接
+- ✅ 重新部署后链接保持不变
+- ✅ 避免重复文件存储
+- ✅ 提高系统一致性和可靠性
+
 ## 总结
 
-这个bug的根本原因是多个配置不一致导致的数据存储和访问问题。通过统一路径配置、修复数据库连接、更新.gitignore规则，现在系统可以正确地"记忆"用户上传的HTML文件，不会再出现文件自动失效的问题。
+本次修复解决了HTML挂载项目中的严重数据持久化问题和文件链接不一致问题，确保了文件链接的永久有效性和数据的安全性。通过统一数据库和文件存储路径、完善.gitignore配置、修复API显示错误、统一文件名生成策略，并提供详细的ZEABUR_MOUNT_PATH配置指南，项目现在具备了生产环境的稳定性和可靠性。
 
-**重要提醒**: 在生产环境部署时，务必确保正确配置 `ZEABUR_MOUNT_PATH` 环境变量和持久化存储，以防止数据丢失。
+**重要提醒**: 在Zeabur等云平台部署时，务必配置ZEABUR_MOUNT_PATH环境变量和持久化存储，以确保数据安全。

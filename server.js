@@ -289,16 +289,38 @@ app.post('/api/paste', requireAuth, async (req, res) => {
   }
 
   try {
-    const fileId = crypto.randomBytes(8).toString('hex');
-    const uniqueFilename = `${fileId}.html`;
+    // 使用MD5哈希生成文件名，确保相同内容的文件有相同的链接
+    const buffer = Buffer.from(htmlCode, 'utf-8');
+    const hash = crypto.createHash('md5').update(buffer).digest('hex');
+    const uniqueFilename = `${hash}.html`;
     const filePath = path.join(uploadsDir, uniqueFilename);
+    
+    // 检查是否已存在相同文件
+    let fileRecord = await File.findOne({ where: { filename: uniqueFilename } });
+    
+    if (fileRecord) {
+      // 文件已存在，返回现有记录
+      return res.json({
+        success: true,
+        message: '文件已存在',
+        file: {
+          id: fileRecord.id,
+          originalName: fileRecord.originalName,
+          filename: fileRecord.filename,
+          size: fileRecord.size,
+          uploadDate: fileRecord.uploadDate.toISOString(),
+          url: `/view/${fileRecord.filename}`,
+          accessCount: fileRecord.accessCount,
+          lastAccessed: fileRecord.lastAccessed.toISOString()
+        }
+      });
+    }
     
     // 将HTML代码保存为文件
     await fs.writeFile(filePath, htmlCode, 'utf-8');
     
-    const buffer = Buffer.from(htmlCode, 'utf-8');
-    const fileRecord = await File.create({
-      id: fileId,
+    fileRecord = await File.create({
+      id: hash.substring(0, 16), // 使用哈希的前16位作为ID
       originalName: filename || `粘贴的HTML_${new Date().toISOString().split('T')[0]}.html`,
       filename: uniqueFilename,
       size: buffer.length,
