@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs-extra');
 const crypto = require('crypto');
+const session = require('express-session');
 
 const { sequelize, File, initializeDatabase } = require('./models/database');
 
@@ -13,6 +14,27 @@ const PORT = process.env.PORT || 3000;
 // 中间件
 app.use(cors());
 app.use(express.json());
+
+// Session配置
+app.use(session({
+  secret: process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex'),
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // 在生产环境中如果使用HTTPS应设为true
+    maxAge: 24 * 60 * 60 * 1000 // 24小时
+  }
+}));
+
+// 认证中间件
+function requireAuth(req, res, next) {
+  if (req.session.authenticated) {
+    next();
+  } else {
+    res.status(401).json({ error: '需要登录' });
+  }
+}
+
 app.use(express.static('public'));
 
 // 确保上传目录存在 - 支持挂载硬盘
@@ -49,8 +71,37 @@ const upload = multer({
   }
 });
 
+// 登录API
+app.post('/api/login', (req, res) => {
+  const { password } = req.body;
+  const correctPassword = process.env.LOGIN_PASSWORD || 'admin123'; // 默认密码，应通过环境变量设置
+  
+  if (password === correctPassword) {
+    req.session.authenticated = true;
+    res.json({ success: true, message: '登录成功' });
+  } else {
+    res.status(401).json({ error: '密码错误' });
+  }
+});
+
+// 登出API
+app.post('/api/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      res.status(500).json({ error: '登出失败' });
+    } else {
+      res.json({ success: true, message: '登出成功' });
+    }
+  });
+});
+
+// 检查认证状态
+app.get('/api/auth/status', (req, res) => {
+  res.json({ authenticated: !!req.session.authenticated });
+});
+
 // 获取所有文件列表
-app.get('/api/files', async (req, res) => {
+app.get('/api/files', requireAuth, async (req, res) => {
   try {
     const files = await File.findAll({
       order: [['uploadDate', 'DESC']]
@@ -75,7 +126,7 @@ app.get('/api/files', async (req, res) => {
 });
 
 // 上传HTML文件
-app.post('/api/upload', upload.single('htmlFile'), async (req, res) => {
+app.post('/api/upload', requireAuth, upload.single('htmlFile'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
@@ -111,7 +162,7 @@ app.post('/api/upload', upload.single('htmlFile'), async (req, res) => {
 });
 
 // 查看HTML文件
-app.get('/view/:filename', async (req, res) => {
+app.get('/view/:filename', requireAuth, async (req, res) => {
   const filename = req.params.filename;
   const filePath = path.join(uploadsDir, filename);
   
@@ -139,7 +190,7 @@ app.get('/view/:filename', async (req, res) => {
 });
 
 // 删除文件
-app.delete('/api/files/:id', async (req, res) => {
+app.delete('/api/files/:id', requireAuth, async (req, res) => {
   const fileId = req.params.id;
   
   try {
@@ -167,7 +218,7 @@ app.delete('/api/files/:id', async (req, res) => {
 });
 
 // 处理粘贴的HTML代码
-app.post('/api/paste', async (req, res) => {
+app.post('/api/paste', requireAuth, async (req, res) => {
   const { htmlCode, filename } = req.body;
   
   if (!htmlCode || typeof htmlCode !== 'string') {
@@ -211,7 +262,7 @@ app.post('/api/paste', async (req, res) => {
 });
 
 // 获取文件统计信息
-app.get('/api/stats', async (req, res) => {
+app.get('/api/stats', requireAuth, async (req, res) => {
   try {
     const totalFiles = await File.count();
     const totalSize = await File.sum('size') || 0;

@@ -304,6 +304,107 @@
             background: #f44336;
         }
 
+        /* 登录模态框样式 */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .login-title {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .login-input {
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff3742;
+        }
+
+        .main-content {
+            display: none;
+        }
+
+        .main-content.authenticated {
+            display: block;
+        }
+
         /* 标签样式 */
         .tab-container {
             border-bottom: 1px solid #e5e7eb;
@@ -481,7 +582,22 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- 登录界面 -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-modal">
+            <h2 class="login-title">🔐 登录验证</h2>
+            <p class="login-subtitle">请输入密码以访问HTML文件托管系统</p>
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <input type="password" id="passwordInput" class="login-input" placeholder="请输入密码" required>
+                <button type="submit" id="loginBtn" class="login-btn">登录</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <div id="mainContent" class="main-content">
+        <button class="logout-btn" onclick="handleLogout()">🚪 登出</button>
+        <div class="container">
         <div class="header">
             <h1>📄 HTML 文件托管</h1>
             <p>轻松上传和分享你的HTML文件</p>
@@ -558,15 +674,112 @@
             </div>
         </div>
     </div>
+    </div> <!-- 关闭主要内容div -->
 
     <script>
         let files = [];
 
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
-            loadFiles();
+            checkAuthStatus();
             setupEventListeners();
         });
+
+        // 检查认证状态
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/api/auth/status');
+                const data = await response.json();
+                
+                if (data.authenticated) {
+                    showMainContent();
+                    loadFiles();
+                } else {
+                    showLoginForm();
+                }
+            } catch (error) {
+                console.error('检查认证状态失败:', error);
+                showLoginForm();
+            }
+        }
+
+        // 显示登录表单
+        function showLoginForm() {
+            document.getElementById('loginOverlay').style.display = 'flex';
+            document.getElementById('mainContent').classList.remove('authenticated');
+        }
+
+        // 显示主要内容
+        function showMainContent() {
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('mainContent').classList.add('authenticated');
+        }
+
+        // 处理登录
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const password = document.getElementById('passwordInput').value;
+            const loginBtn = document.getElementById('loginBtn');
+            
+            if (!password) {
+                showToast('请输入密码', 'error');
+                return;
+            }
+            
+            loginBtn.disabled = true;
+            loginBtn.textContent = '登录中...';
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast('登录成功！', 'success');
+                    showMainContent();
+                    loadFiles();
+                    document.getElementById('passwordInput').value = '';
+                } else {
+                    showToast(data.error || '登录失败', 'error');
+                }
+            } catch (error) {
+                showToast('登录失败：' + error.message, 'error');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = '登录';
+            }
+        }
+
+        // 处理登出
+        async function handleLogout() {
+            if (!confirm('确定要登出吗？')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast('已成功登出', 'success');
+                    showLoginForm();
+                } else {
+                    showToast('登出失败', 'error');
+                }
+            } catch (error) {
+                showToast('登出失败：' + error.message, 'error');
+            }
+        }
 
         function setupEventListeners() {
             const uploadSection = document.getElementById('uploadSection');
@@ -651,15 +864,21 @@
                     filename: filename.trim() || null
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 401) {
+                    showLoginForm();
+                    return;
+                }
+                return response.json();
+            })
             .then(data => {
-                if (data.success) {
+                if (data && data.success) {
                     showToast('代码保存成功！', 'success');
                     loadFiles();
                     document.getElementById('htmlCodeInput').value = '';
                     document.getElementById('pasteFilename').value = '';
                     switchTab('upload'); // 切换回上传标签
-                } else {
+                } else if (data) {
                     showToast('保存失败：' + data.error, 'error');
                 }
             })
@@ -691,13 +910,19 @@
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 401) {
+                    showLoginForm();
+                    return;
+                }
+                return response.json();
+            })
             .then(data => {
-                if (data.success) {
+                if (data && data.success) {
                     showToast('文件上传成功！', 'success');
                     loadFiles();
                     document.getElementById('fileInput').value = '';
-                } else {
+                } else if (data) {
                     showToast('上传失败：' + data.error, 'error');
                 }
             })
@@ -711,10 +936,18 @@
 
         function loadFiles() {
             fetch('/api/files')
-                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 401) {
+                        showLoginForm();
+                        return;
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    files = data;
-                    renderFiles();
+                    if (data) {
+                        files = data;
+                        renderFiles();
+                    }
                 })
                 .catch(error => {
                     console.error('加载文件列表失败:', error);
@@ -725,11 +958,19 @@
 
         function loadStats() {
             fetch('/api/stats')
-                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 401) {
+                        showLoginForm();
+                        return;
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    document.getElementById('totalFiles').textContent = data.totalFiles;
-                    document.getElementById('totalSize').textContent = formatFileSize(data.totalSize);
-                    document.getElementById('totalViews').textContent = data.totalViews;
+                    if (data) {
+                        document.getElementById('totalFiles').textContent = data.totalFiles;
+                        document.getElementById('totalSize').textContent = formatFileSize(data.totalSize);
+                        document.getElementById('totalViews').textContent = data.totalViews;
+                    }
                 })
                 .catch(error => {
                     console.error('加载统计信息失败:', error);
@@ -777,12 +1018,18 @@
             fetch(`/api/files/${fileId}`, {
                 method: 'DELETE'
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 401) {
+                    showLoginForm();
+                    return;
+                }
+                return response.json();
+            })
             .then(data => {
-                if (data.success) {
+                if (data && data.success) {
                     showToast('文件删除成功', 'success');
                     loadFiles();
-                } else {
+                } else if (data) {
                     showToast('删除失败', 'error');
                 }
             })
