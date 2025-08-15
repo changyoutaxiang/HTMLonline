@@ -164,10 +164,8 @@ app.post('/api/upload', requireAuth, upload.single('htmlFile'), async (req, res)
     // 移动临时文件到最终位置
     fs.renameSync(tempFilePath, finalFilePath);
     
-    const fileId = crypto.randomBytes(8).toString('hex');
-    
     fileRecord = await File.create({
-      id: fileId,
+      id: hash.substring(0, 16), // 使用哈希的前16位作为ID
       originalName: req.file.originalname,
       filename: finalFilename,
       size: req.file.size,
